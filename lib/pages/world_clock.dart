@@ -1,6 +1,5 @@
+import 'package:clock_app/component/lakindu/clockview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
 import '../component/navBar.dart';
 
 class WorldClock extends StatefulWidget {
@@ -17,6 +16,9 @@ class _WorldClockState extends State<WorldClock> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("WorldClock"),
+      ),
+      body: Container(
+        child: Clockview(),
       ),
       bottomNavigationBar: const NavBar(currItem: 0),
     );
