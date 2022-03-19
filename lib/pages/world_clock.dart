@@ -20,6 +20,7 @@ class _WorldClockState extends State<WorldClock> {
       body: Container(
         child: Clockview(),
       ),
+      
       bottomNavigationBar: const NavBar(currItem: 0),
     );
   }
