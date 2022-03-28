@@ -17,9 +17,7 @@ class _WorldClockState extends State<WorldClock> {
       appBar: AppBar(
         title: const Text("WorldClock"),
       ),
-      body: Container(
-        child: Clockview(),
-      ),
+      body: Clockview(),
       
       bottomNavigationBar: const NavBar(currItem: 0),
     );
