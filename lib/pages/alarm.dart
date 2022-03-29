@@ -1,17 +1,29 @@
 import 'package:clock_app/pages/world_clock.dart';
+import 'package:clock_app/services/alarm_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../component/alarm_component/single_alarm_component.dart';
 import '../component/navBar.dart';
 
 class Alarm extends StatefulWidget {
   static const String routeName = '/alarm';
-  const Alarm({Key? key}) : super(key: key);
+  final AlarmService _alarmService;
+  const Alarm({Key? key})
+      : _alarmService = const AlarmService(),
+        super(key: key);
 
   @override
   State<Alarm> createState() => _AlarmState();
 }
 
 class _AlarmState extends State<Alarm> {
+  late AlarmService _alarmService;
+  @override
+  void initState() {
+    super.initState();
+    _alarmService = widget._alarmService;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,48 +40,32 @@ class _AlarmState extends State<Alarm> {
           ),
         ],
       ),
-      body: ListView(
-        children: <Widget>[
-          Material(
-            child: Container(
-              margin: const EdgeInsets.all(6),
-              child: SwitchListTile(
-                activeColor: const Color.fromARGB(255, 0, 217, 246),
-                secondary: const Icon(
-                  Icons.alarm,
-                ),
-                title: Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: <Widget>[
-                    Text(
-                      "09:30",
-                      style: GoogleFonts.lato(
-                        fontSize: 48,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                subtitle: Container(
-                  child: Text(
-                    "Weekends",
-                    style: GoogleFonts.roboto(
-                      fontSize: 15
-                    ),
-                  ),
-                  margin: const EdgeInsets.only(top: 2.0),
-                ),
-                onChanged: (bool value) {
-                  value = !value;
+      body: FutureBuilder(
+          future: _alarmService.getAlarms(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return SingleAlarm(alarm: snapshot.data[index]);
+
                 },
-                value: true,
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+
+            // By default, show a loading spinner.
+            return Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [CircularProgressIndicator()],
               ),
-            ),
-          ),
-          const Divider(),
-        ],
-      ),
+            );
+          }),
       bottomNavigationBar: const NavBar(
         currItem: 1,
       ),
