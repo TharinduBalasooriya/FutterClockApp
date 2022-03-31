@@ -37,6 +37,10 @@ dependencies:
   device_preview: ^1.0.0
   google_fonts: ^2.3.1
   http: ^0.13.4
+  flutter_datetime_picker: ^1.5.1
+  date_time_picker: ^2.1.0
+  geolocator: ^5.3.1
+  flutter_slidable: ^1.2.0
 
 dev_dependencies:
   flutter_test:

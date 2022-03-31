@@ -1,5 +1,6 @@
 import 'package:clock_app/pages/alarm.dart';
 import 'package:clock_app/pages/reminder.dart';
+import 'package:clock_app/pages/reminder_form.dart';
 import 'package:clock_app/pages/todo.dart';
 import 'package:clock_app/pages/world_clock.dart';
 import 'package:flutter/foundation.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         Alarm.routeName:(context)=> const Alarm(),
         Reminder.routeName:(context)=> const Reminder(),
         ToDoList.routeName:(context)=> const ToDoList(),
+        Reminder_form.routeName:(context)=> const Reminder_form(),
       
       },
   
