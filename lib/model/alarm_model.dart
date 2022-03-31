@@ -15,9 +15,10 @@ class Alarm {
   final int minute;
   final String ampm;
   final dynamic days;
+  final String sound;
 
 
-  const Alarm({required this.id, required this. hour, required this.minute, required this.ampm,required this.days});
+  const Alarm({required this.id, required this. hour, required this.minute, required this.ampm,required this.days, required this.sound});
 
   factory Alarm.fromJSON(Map<String, dynamic> data) {
     return Alarm(
@@ -26,6 +27,7 @@ class Alarm {
       minute: data['minute'],
       ampm: data['ampm'],
       days: data['days'],
+      sound: data['sound'],
     );
   }
 }
