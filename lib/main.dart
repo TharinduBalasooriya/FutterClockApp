@@ -1,6 +1,7 @@
 import 'package:clock_app/pages/alarm.dart';
 import 'package:clock_app/pages/alarm_form.dart';
 import 'package:clock_app/pages/reminder.dart';
+import 'package:clock_app/pages/reminder_form.dart';
 import 'package:clock_app/pages/todo.dart';
 import 'package:clock_app/pages/world_clock.dart';
 import 'package:flutter/foundation.dart';
@@ -29,11 +30,14 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       home: const WorldClock(),
       routes: {
-        WorldClock.routeName: (context) => const WorldClock(),
-        Alarm.routeName: (context) => const Alarm(),
-        Reminder.routeName: (context) => const Reminder(),
-        ToDoList.routeName: (context) => const ToDoList(),
+
+
+        Alarm.routeName:(context)=> const Alarm(),
+        Reminder.routeName:(context)=> const Reminder(),
+        ToDoList.routeName:(context)=> const ToDoList(),
+        Reminder_form.routeName:(context)=> const Reminder_form(),
         AddAlarmform.routeName: (context) => const AddAlarmform(),
+
       },
     );
   }
