@@ -29,4 +29,32 @@ class AlarmService {
     }
     return alarms;
   }
+
+//Create Alarm
+  Future<Alarm> createAlarm(Alarm alarm) async {
+    final response = await http.post(
+      Uri.parse('https://clock-app-ctse.herokuapp.com/api/alarms'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        "hour": alarm.hour,
+        "minute": alarm.minute,
+        "ampm": alarm.ampm,
+        "days": alarm.days,
+        "active": true,
+        "sound": alarm.sound
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      return Alarm.fromJSON(json.decode(response.body));
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to create album.');
+    }
+  }
 }

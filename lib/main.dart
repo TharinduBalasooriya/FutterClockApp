@@ -1,4 +1,5 @@
 import 'package:clock_app/pages/alarm.dart';
+import 'package:clock_app/pages/alarm_form.dart';
 import 'package:clock_app/pages/reminder.dart';
 import 'package:clock_app/pages/todo.dart';
 import 'package:clock_app/pages/world_clock.dart';
@@ -12,6 +13,7 @@ void main() => runApp(
         builder: (context) => const MyApp(), // Wrap your app
       ),
     );
+//void main() => runApp( const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -27,14 +29,12 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       home: const WorldClock(),
       routes: {
-        
-        WorldClock.routeName:(context)=> const WorldClock(),
-        Alarm.routeName:(context)=> const Alarm(),
-        Reminder.routeName:(context)=> const Reminder(),
-        ToDoList.routeName:(context)=> const ToDoList(),
-      
+        WorldClock.routeName: (context) => const WorldClock(),
+        Alarm.routeName: (context) => const Alarm(),
+        Reminder.routeName: (context) => const Reminder(),
+        ToDoList.routeName: (context) => const ToDoList(),
+        AddAlarmform.routeName: (context) => const AddAlarmform(),
       },
-  
     );
   }
 }

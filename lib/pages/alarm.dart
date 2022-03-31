@@ -1,3 +1,4 @@
+import 'package:clock_app/pages/alarm_form.dart';
 import 'package:clock_app/pages/world_clock.dart';
 import 'package:clock_app/services/alarm_service.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +32,13 @@ class _AlarmState extends State<Alarm> {
         title: const Text("Alarm"),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.language),
+            icon: const Icon(Icons.add),
             onPressed: () {
               // handle the press
-              Navigator.pushNamedAndRemoveUntil(
-                  context, WorldClock.routeName, (r) => false);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddAlarmform()),
+              );
             },
           ),
         ],
@@ -48,7 +51,6 @@ class _AlarmState extends State<Alarm> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   return SingleAlarm(alarm: snapshot.data[index]);
-
                 },
               );
             } else if (snapshot.hasError) {
