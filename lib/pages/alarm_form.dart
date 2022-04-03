@@ -1,7 +1,9 @@
 import 'package:clock_app/model/alarm_model.dart';
+import 'package:clock_app/provider/alarm_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:provider/provider.dart';
+import 'package:clock_app/pages/alarm.dart';
 import '../services/alarm_service.dart';
 
 class AddAlarmform extends StatefulWidget {
@@ -280,7 +282,8 @@ class _AddAlarmformState extends State<AddAlarmform> {
                     sound: selectedTone);
 
                 print(alarm.days);
-                Alarm createdAlarm = await _alarmService.createAlarm(alarm);
+                Alarm createdAlarm = await Provider.of<AlarmProvider>(context, listen: false).addAlarm(alarm);
+                
                 if (createdAlarm != null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -288,6 +291,11 @@ class _AddAlarmformState extends State<AddAlarmform> {
                     ),
                   );
                   Navigator.pop(context);
+                  
+                //    Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => AlarmPage()),
+                // );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -313,9 +321,9 @@ class _AddAlarmformState extends State<AddAlarmform> {
 
                 //Navigator.pop(context);
               },
-              child: Text("Save",
+              child: Text("SAVE",
                   style: GoogleFonts.lato(
-                      fontSize: 15, fontWeight: FontWeight.w600))),
+                      fontSize: 17 , color: Colors.white)))
         ],
       ),
       body: (SingleChildScrollView(

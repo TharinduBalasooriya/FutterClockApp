@@ -4,17 +4,23 @@ import 'package:clock_app/pages/reminder.dart';
 import 'package:clock_app/pages/reminder_form.dart';
 import 'package:clock_app/pages/todo.dart';
 import 'package:clock_app/pages/world_clock.dart';
+import 'package:clock_app/provider/alarm_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(
       DevicePreview(
         enabled: !kReleaseMode,
-        builder: (context) => const MyApp(), // Wrap your app
+        builder: (context) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => AlarmProvider()),
+          ],
+          child: const MyApp(),
+        ), // Wrap your app
       ),
     );
-//void main() => runApp( const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -30,14 +36,12 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       home: const WorldClock(),
       routes: {
-
-
-        Alarm.routeName:(context)=> const Alarm(),
-        Reminder.routeName:(context)=> const Reminder(),
-        ToDoList.routeName:(context)=> const ToDoList(),
-        Reminder_form.routeName:(context)=> const Reminder_form(),
+        WorldClock.routeName: (context) => const WorldClock(),
+        AlarmPage.routeName: (context) => const AlarmPage(),
+        Reminder.routeName: (context) => const Reminder(),
+        ToDoList.routeName: (context) => const ToDoList(),
+        Reminder_form.routeName: (context) => const Reminder_form(),
         AddAlarmform.routeName: (context) => const AddAlarmform(),
-
       },
     );
   }
