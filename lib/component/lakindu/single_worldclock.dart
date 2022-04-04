@@ -76,7 +76,7 @@ class _SingleWorldState extends State<SingleWorld> {
                   textBaseline: TextBaseline.alphabetic,
                   children: <Widget>[
                     Text(
-                      widget.world.location+'\n'+ widget.world.time,
+                      widget.world.location+'\n'+ widget.world.time+'               '+widget.world.note,
                       style: GoogleFonts.lato(
                         fontSize:25,
                         fontWeight: FontWeight.w300
