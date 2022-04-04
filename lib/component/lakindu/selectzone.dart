@@ -54,7 +54,7 @@ class _SelectzoneState extends State<Selectzone> {
     print(worldTimeObj.location);
     print(worldTimeObj.time);
     World world =
-        World(location: worldTimeObj.location, time: worldTimeObj.time, id: "");
+        World(location: worldTimeObj.location, time: worldTimeObj.time, id: "",note: '');
          World createworldtime = await Provider.of<WorldtimeProvider>(context,listen:false).createWorldtime(world);
     if (createworldtime != null) {
       ScaffoldMessenger.of(context).showSnackBar(

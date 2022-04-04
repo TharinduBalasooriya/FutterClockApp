@@ -39,6 +39,7 @@ class WorldService{
       body: jsonEncode(<String, dynamic>{
         "location": world.location,
         "time": world.time,
+        "note": 'country note'
        
       }),
     );
