@@ -1,19 +1,26 @@
 import 'dart:async';
 import 'package:clock_app/component/lakindu/clockview.dart';
 import 'package:clock_app/component/lakindu/selectzone.dart';
+import 'package:clock_app/component/lakindu/worldlist.dart';
+import 'package:clock_app/services/world_service.dart';
 import 'package:flutter/material.dart';
 import '../component/navBar.dart';
 import 'package:intl/intl.dart';
 
 class WorldClock extends StatefulWidget {
   static const String routeName = '/worldclock';
-  const WorldClock({Key? key}) : super(key: key);
+  final WorldService _worldService;
+  const WorldClock({Key? key}) 
+  : _worldService = const WorldService(),
+    super(key:key);
+
 
   @override
   State<WorldClock> createState() => _WorldClockState();
 }
 
 class _WorldClockState extends State<WorldClock> {
+  late WorldService _worldService;
   @override
   Widget build(BuildContext context) {
     var now = DateTime.now();
@@ -23,6 +30,7 @@ class _WorldClockState extends State<WorldClock> {
         title: const Text("WorldClock"),
       ),
       body: Column(
+
         children: [
           Row(
             children: [
@@ -48,21 +56,26 @@ class _WorldClockState extends State<WorldClock> {
               ),
             ],
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: MaterialButton(
-              color: Colors.cyan,
-              shape: CircleBorder(),
-              child: Icon(Icons.add),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Selectzone()),
-                );
-              },
-            ),
+          Column(
+            children: [Align(
+              alignment: Alignment.centerRight,
+              child: MaterialButton(
+                color: Colors.cyan,
+                shape: CircleBorder(),
+                child: Icon(Icons.add),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Selectzone()),
+                  );
+                },
+              ),
+            ),]
           ),
+          const SizedBox(height:260,
+        child:WorldClocklists()),
         ],
+      
       ),
       bottomNavigationBar: const NavBar(currItem: 0),
     );
