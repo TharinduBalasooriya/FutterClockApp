@@ -5,6 +5,7 @@ import 'package:clock_app/pages/reminder_form.dart';
 import 'package:clock_app/pages/todo.dart';
 import 'package:clock_app/pages/world_clock.dart';
 import 'package:clock_app/provider/alarm_provider.dart';
+import 'package:clock_app/provider/worldtime_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
@@ -16,6 +17,8 @@ void main() => runApp(
         builder: (context) => MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (context) => AlarmProvider()),
+            ChangeNotifierProvider(create: (context) => WorldtimeProvider() ),
+
           ],
           child: const MyApp(),
         ), // Wrap your app
