@@ -41,4 +41,19 @@ class WorldTime {
       time = 'Could not get the time data';
     }
   }
+
+
+ static Future<List<String>?> getTimeZones() async {
+    Response response =
+      await get(Uri.parse('http://worldtimeapi.org/api/timezone/timezone'));
+      Map data = jsonDecode(response.body);
+    if (response != null)
+      print('error');
+    else
+      return null;
+  }
+
+
+
+
 }

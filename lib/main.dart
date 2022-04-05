@@ -1,15 +1,18 @@
 import 'package:clock_app/pages/alarm.dart';
 import 'package:clock_app/pages/alarm_form.dart';
+import 'package:clock_app/pages/edit_alarm.dart';
 import 'package:clock_app/pages/reminder.dart';
 import 'package:clock_app/pages/reminder_form.dart';
 import 'package:clock_app/pages/todo.dart';
 import 'package:clock_app/pages/world_clock.dart';
 import 'package:clock_app/provider/alarm_provider.dart';
 import 'package:clock_app/provider/reminder_provider.dart';
+import 'package:clock_app/provider/worldtime_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:provider/provider.dart';
+import 'package:clock_app/pages/edit_alarm.dart';
 
 void main() => runApp(
       DevicePreview(
@@ -18,6 +21,7 @@ void main() => runApp(
           providers: [
             ChangeNotifierProvider(create: (context) => AlarmProvider()),
             ChangeNotifierProvider(create: (context) => ReminderProvider()),
+            ChangeNotifierProvider(create: (context) => WorldtimeProvider()),
           ],
           child: const MyApp(),
         ), // Wrap your app
@@ -44,6 +48,7 @@ class MyApp extends StatelessWidget {
         ToDoList.routeName: (context) => const ToDoList(),
         Reminder_form.routeName: (context) => const Reminder_form(),
         AddAlarmform.routeName: (context) => const AddAlarmform(),
+        //EditAlarm.routeName: (context) => const EditAlarm(alarmId: ''),
       },
     );
   }
