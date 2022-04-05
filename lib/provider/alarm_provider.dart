@@ -24,13 +24,14 @@ class AlarmProvider extends ChangeNotifier {
   Future<Alarm> addAlarm(Alarm alarm) async {
    
      Alarm result =  await _alarmService.createAlarm(alarm);
-      notifyListeners();
+    notifyListeners();
     return result;
   }
 
-  //TODO: update alarm
-  // Future<bool> updateAlarm(Alarm alarm) async {
-  //   return await _alarmService.updateAlarm(alarm);
-  // }
+  Future<Alarm> updateAlarm(Alarm alarm) async {
+    Alarm result = await _alarmService.updateAlarm(alarm);
+    notifyListeners();
+    return result;
+  }
 
 }

@@ -1,40 +1,30 @@
 import 'package:clock_app/model/alarm_model.dart';
-import 'package:clock_app/provider/alarm_provider.dart';
+import 'package:clock_app/services/alarm_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
-import 'package:clock_app/pages/alarm.dart';
-import '../services/alarm_service.dart';
 
-class AddAlarmform extends StatefulWidget {
-  static const String routeName = '/addAlarm';
-  final AlarmService _alarmService;
-  const AddAlarmform({Key? key})
-      : _alarmService = const AlarmService(),
+import '../provider/alarm_provider.dart';
+
+class EditAlarm extends StatefulWidget {
+  static const String routeName = '/editAlarm';
+  final String _alarmId;
+  EditAlarm({Key? key, required String alarmId})
+      : _alarmId = alarmId,
         super(key: key);
 
   @override
-  State<AddAlarmform> createState() => _AddAlarmformState();
+  State<EditAlarm> createState() => _EditAlarmState();
 }
 
-class _AddAlarmformState extends State<AddAlarmform> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _EditAlarmState extends State<EditAlarm> {
+  late String alarmId;
   late AlarmService _alarmService;
-  @override
-  void initState() {
-    super.initState();
-    _alarmService = widget._alarmService;
-  }
-
-  final TimeOfDay _time = const TimeOfDay(hour: 7, minute: 15);
+  late Alarm alarm;
   final hourController = TextEditingController();
   final minController = TextEditingController();
-
-  List<bool> isSelected = [true, false];
-  int _hr = 00;
-  int _min = 00;
-  String _ampm = 'AM';
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Map<String, bool> days = {
     'Monday': true,
     'Tuesday': false,
@@ -46,15 +36,76 @@ class _AddAlarmformState extends State<AddAlarmform> {
   };
 
   Map<String, bool> rigingTones = {
-    'RingingTone1': true,
+    'RingingTone1': false,
     'RinginTone2': false,
   };
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    alarmId = widget._alarmId;
+    _alarmService = const AlarmService();
+    getAlarmDetails();
+  }
+
+  Future<void> getAlarmDetails() async {
+    alarm = await _alarmService.getAlarmById(alarmId);
+
+    hourController.value = hourController.value = TextEditingValue(
+      text: alarm.hour.toString(),
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: alarm.hour.toString().length),
+      ),
+    );
+
+    minController.value = TextEditingValue(
+      text: alarm.minute.toString(),
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: alarm.minute.toString().length),
+      ),
+    );
+
+    alarm.days.forEach((element) {
+      switch (element) {
+        case 'Monday':
+          days['Monday'] = true;
+          break;
+        case 'Tuesday':
+          days['Tuesday'] = true;
+          break;
+        case 'Wednesday':
+          days['Wednesday'] = true;
+          break;
+        case 'Thursday':
+          days['Thursday'] = true;
+          break;
+        case 'Friday':
+          days['Friday'] = true;
+          break;
+        case 'Saturday':
+          days['Saturday'] = true;
+          break;
+        case 'Sunday':
+          days['Sunday'] = true;
+          break;
+        default:
+          days['Monday'] = true;
+      }
+    });
+
+    rigingTones.keys.contains(alarm.sound)
+        ? rigingTones[alarm.sound] = true
+        : rigingTones['RingingTone1'] = true;
+
+    setState(() {});
+  }
 
   Future<void> _showTimePicker() async {
     final TimeOfDay? result =
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (result != null) {
-      _ampm = result.hour < 12 ? 'AM' : 'PM';
+      alarm.ampm = result.hour < 12 ? 'AM' : 'PM';
       hourController.value = TextEditingValue(
         text: result.hour.toString(),
         selection: TextSelection.fromPosition(
@@ -97,7 +148,7 @@ class _AddAlarmformState extends State<AddAlarmform> {
             decoration:
                 const InputDecoration(counterText: "", hintText: "00hr"),
             onSaved: (value) {
-              _hr = int.parse(value!);
+              alarm.hour = int.parse(value!);
             },
           ),
         ),
@@ -111,7 +162,7 @@ class _AddAlarmformState extends State<AddAlarmform> {
               return null;
             },
             onSaved: (value) {
-              _min = int.parse(value!);
+              alarm.minute = int.parse(value!);
             },
             maxLength: 2,
             decoration:
@@ -253,7 +304,7 @@ class _AddAlarmformState extends State<AddAlarmform> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Alarm"),
+        title: const Text("Edit Alarm"),
         actions: [
           TextButton(
               onPressed: () async {
@@ -273,26 +324,20 @@ class _AddAlarmformState extends State<AddAlarmform> {
                   }
                 });
 
-                Alarm alarm = Alarm(
-                    id: "",
-                    hour: _hr,
-                    minute: _min,
-                    ampm: _ampm,
-                    days: selectedDays,
-                    sound: selectedTone);
+                alarm.days = selectedDays;
+                alarm.sound = selectedTone;
 
-                print(alarm.days);
-                Alarm createdAlarm =
+                Alarm updatedAlarm =
                     await Provider.of<AlarmProvider>(context, listen: false)
-                        .addAlarm(alarm);
+                        .updateAlarm(alarm);
 
-                if (createdAlarm != null) {
+                if (updatedAlarm != null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Alarm created successfully'),
+                      content: Text('Alarm updated successfully'),
                     ),
                   );
-                  Navigator.pop(context);
+                   Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

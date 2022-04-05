@@ -57,7 +57,7 @@ class _AlarmState extends State<AlarmPage> {
                   },
                 );
               } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
+                return Text('Error ${snapshot.error}');
               }
     
               // By default, show a loading spinner.
