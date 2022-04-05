@@ -55,7 +55,7 @@ class ClockPainter extends CustomPainter {
     var centerBrush = Paint()..color = Color.fromRGBO(255, 255, 255, 1);
 
     var secHandBrush = Paint()
-      ..color = Color.fromARGB(255, 243, 189, 108)
+      ..color = Color.fromARGB(255, 231, 240, 102)
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 3;

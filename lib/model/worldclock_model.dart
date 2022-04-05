@@ -2,9 +2,9 @@ class World{
   final String id;
   final String location;
   final String time;
-  final String note;
+     String note;
   
-  const World({required this.id,required this.location,required this.time,required this.note});
+   World({required this.id,required this.location,required this.time,required this.note});
 
   factory World.fromJSON(Map<String, dynamic> data){
     return World(
