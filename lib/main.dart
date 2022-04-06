@@ -1,5 +1,4 @@
 import 'package:clock_app/pages/alarm.dart';
-import 'package:clock_app/pages/notePage.dart';
 import 'package:clock_app/pages/alarm_form.dart';
 import 'package:clock_app/pages/edit_alarm.dart';
 

@@ -54,16 +54,20 @@ class _AddAlarmformState extends State<AddAlarmform> {
     final TimeOfDay? result =
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (result != null) {
-      _ampm = result.hour < 12 ? 'AM' : 'PM';
+      _ampm = result.period == DayPeriod.am ? 'AM' : 'PM';
+   
+
       hourController.value = TextEditingValue(
-        text: result.hour.toString(),
+        text: result.hour % 12 == 0 ? '12' : '${result.hour % 12}',
         selection: TextSelection.fromPosition(
           TextPosition(offset: result.hour.toString().length),
         ),
       );
 
       minController.value = TextEditingValue(
-        text: result.minute.toString(),
+        text: result.minute.toString().length == 1
+            ? '0${result.minute}'
+            : '${result.minute}',
         selection: TextSelection.fromPosition(
           TextPosition(offset: result.minute.toString().length),
         ),
