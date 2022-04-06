@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:js';
 
+import 'package:clock_app/component/lakindu/editworldnote.dart';
 import 'package:clock_app/model/alarm_model.dart';
 import 'package:clock_app/model/worldclock_model.dart';
 import 'package:clock_app/provider/alarm_provider.dart';
@@ -58,10 +60,15 @@ class _SingleWorldState extends State<SingleWorld> {
                     icon: Icons.delete,
                     label: 'Delete',
                   ),
-                  const SlidableAction(
-                    onPressed: null,
+                   SlidableAction(
+                    onPressed:(BuildContext context) async {
+                      Navigator.push(
+                        context, 
+                      MaterialPageRoute(builder: (context) => Editworld(worldId:widget.world.id)),
+                      );
+                      
+                    },
                     backgroundColor: Color.fromARGB(255, 230, 166, 38),
-                    foregroundColor: Colors.white,
                     icon: Icons.edit,
                     label: 'Edit',
                   ),

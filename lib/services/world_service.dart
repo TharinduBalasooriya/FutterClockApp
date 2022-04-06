@@ -75,4 +75,49 @@ class WorldService{
 }
 
 
+ //Get Single Worldclock by id
+  Future<World> getWorldId(String id) async {
+    final response = await http.get(
+      Uri.parse('https://clock-app-ctse.herokuapp.com/api/worldclock/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return World.fromJSON(json.decode(response.body));
+    } else {
+      // If the server did not return a "200 OK response",
+      // then throw an exception.
+      throw Exception('Failed to get Single World Clock');
+    }
+  }
+
+
+ //Update world
+  Future<World> updateworld(World world) async {
+    final response = await http.put(
+      Uri.parse('https://clock-app-ctse.herokuapp.com/api/worldclock/${world.id}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+              "note": world.note
+
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      return World.fromJSON(json.decode(response.body));
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to update WorldClock Note.');
+    }
+  }
+
+
+
 }
