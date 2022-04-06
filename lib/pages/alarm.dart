@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:clock_app/pages/alarm_form.dart';
-import 'package:clock_app/pages/world_clock.dart';
+import 'package:clock_app/pages/alarm_ring_page.dart';
 import 'package:clock_app/provider/alarm_provider.dart';
 import 'package:clock_app/services/alarm_service.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../component/alarm_component/single_alarm_component.dart';
 import '../component/navBar.dart';
+import '../model/alarm_model.dart';
+import 'package:intl/intl.dart';
 
 class AlarmPage extends StatefulWidget {
   static const String routeName = '/alarm';
@@ -21,10 +25,34 @@ class AlarmPage extends StatefulWidget {
 
 class _AlarmState extends State<AlarmPage> {
   late AlarmService _alarmService;
+  late List<Alarm> _alarms;
+
   @override
   void initState() {
     super.initState();
     _alarmService = widget._alarmService;
+    checkActiveAlarm();
+  }
+
+  void checkActiveAlarm() async {
+    const oneSec = Duration(seconds: 3);
+    Timer.periodic(oneSec, (Timer t) async {
+      _alarms = await _alarmService.getAlarms();
+      String hour = DateFormat('h').format(DateTime.now());
+      String minute = DateFormat('m').format(DateTime.now());
+      String ampm = DateFormat('a').format(DateTime.now());
+
+      _alarms.forEach((Alarm element) {
+        if (element.hour.toString() == hour &&
+            element.minute.toString() == minute &&
+            element.ampm.toString() == ampm) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AlarmRing(alarmId: element.id)));
+        }
+      });
+    });
   }
 
   @override
@@ -59,7 +87,7 @@ class _AlarmState extends State<AlarmPage> {
               } else if (snapshot.hasError) {
                 return Text('Error ${snapshot.error}');
               }
-    
+
               // By default, show a loading spinner.
               return Container(
                 width: double.infinity,
@@ -75,7 +103,6 @@ class _AlarmState extends State<AlarmPage> {
           currItem: 1,
         ),
       ),
-     
     );
   }
 }

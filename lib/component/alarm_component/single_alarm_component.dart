@@ -94,10 +94,7 @@ class _SingleAlarmState extends State<SingleAlarm> {
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: <Widget>[
-                        Text(
-                          widget.alarm.hour.toString() +
-                              ":" +
-                              widget.alarm.minute.toString(),
+                        Text( widget.alarm.minute < 10 ? widget.alarm.hour.toString() + ":" + "0" + widget.alarm.minute.toString() : widget.alarm.hour.toString() + ":" + widget.alarm.minute.toString(),
                           style: GoogleFonts.lato(
                             fontSize: 48,
                             fontWeight: FontWeight.w700,
@@ -105,7 +102,7 @@ class _SingleAlarmState extends State<SingleAlarm> {
                         ),
                         Expanded(child: Container()),
                         Text(
-                          "AM",
+                          widget.alarm.ampm,
                           style: GoogleFonts.lato(
                             fontSize: 30,
                             fontWeight: FontWeight.w800,
