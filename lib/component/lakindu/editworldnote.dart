@@ -59,6 +59,7 @@ class _EditworldclockState extends State<Editworld> {
         Text(
          worldtime,
           style: GoogleFonts.lato(
+           color: Colors.grey,
             fontSize: 36,
             fontWeight: FontWeight.w300,
           ),
@@ -66,6 +67,7 @@ class _EditworldclockState extends State<Editworld> {
         Text(
           worldlocation,
           style: GoogleFonts.lato(
+            color: Colors.cyan,
             fontSize: 46,
             fontWeight: FontWeight.w700,
           ),
