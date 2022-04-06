@@ -28,23 +28,44 @@ class _SelectzoneState extends State<Selectzone> {
 
   List<WorldTime> locations = [
     WorldTime(
-        timezone: 'Asia/Dhaka', location: 'Dhaka', flag: 'bangladesh.png'),
+        timezone: 'Asia/Dhaka', location: 'Bangladesh', flag: 'bangladesh.png'),
     WorldTime(timezone: 'Europe/London', location: 'London', flag: 'uk.png'),
     WorldTime(
-        timezone: 'Europe/Athens', location: 'Athens', flag: 'greece.png'),
+        timezone: 'Europe/Athens', location: 'Greece', flag: 'greece.png'),
     WorldTime(
-        timezone: 'Europe/Berlin', location: 'Berlin', flag: 'germany.png'),
+        timezone: 'Europe/Berlin', location: 'Germany', flag: 'germany.png'),
     WorldTime(timezone: 'Africa/Cairo', location: 'Cairo', flag: 'egypt.png'),
     WorldTime(
-        timezone: 'Africa/Nairobi', location: 'Nairobi', flag: 'kenya.png'),
+        timezone: 'Africa/Nairobi', location: 'Kenya', flag: 'kenya.png'),
     WorldTime(
         timezone: 'America/Chicago', location: 'Chicago', flag: 'usa.png'),
     WorldTime(
         timezone: 'America/New_York', location: 'New York', flag: 'usa.png'),
     WorldTime(
-        timezone: 'Asia/Seoul', location: 'Seoul', flag: 'south_korea.png'),
+        timezone: 'Asia/Seoul', location: 'South Korea', flag: 'south_korea.png'),
     WorldTime(
-        timezone: 'Asia/Jakarta', location: 'Jakarta', flag: 'indonesia.png')
+        timezone: 'Asia/Jakarta', location: 'Indonesia', flag: 'indonesia.png'),
+    WorldTime(
+        timezone: 'Asia/Kathmandu', location: 'Nepal', flag: 'nepal.png'),
+    WorldTime(
+        timezone: 'Asia/Kolkata', location: 'India', flag: 'india.png'),
+    WorldTime(
+        timezone: 'Asia/Hong_Kong', location: 'China', flag: 'china.png'),
+    WorldTime(
+        timezone: 'Asia/Kabul', location: 'Afganistan ', flag: 'af.png'),    
+    WorldTime(
+        timezone: 'Asia/Singapore', location: 'Singapore', flag: 'singapoor.png'),
+    WorldTime(
+        timezone: 'Asia/Tokyo', location: 'Japan', flag: 'japan.png'), 
+    WorldTime(
+        timezone: 'Australia/Sydneye', location: 'Australia', flag: 'australia.png'), 
+
+    WorldTime(
+        timezone: 'Pacific/Auckland', location: 'New Zealand', flag: 'newzeland.png'),
+      
+    WorldTime(
+        timezone: 'Europe/Moscow', location: 'Rusia', flag: 'rusia.png'),
+        
   ];
 
   void updateTime(index) async {
