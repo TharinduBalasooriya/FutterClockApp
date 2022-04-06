@@ -282,6 +282,7 @@ class _AddAlarmformState extends State<AddAlarmform> {
                     hour: _hr,
                     minute: _min,
                     ampm: _ampm,
+                    active: true,
                     days: selectedDays,
                     sound: selectedTone);
 

@@ -35,6 +35,13 @@ class _SingleAlarmState extends State<SingleAlarm> {
     return await _alarmService.deleteAlarm(widget.alarm.id);
   }
 
+  Future<void> _updateAlarm(Alarm alarm) async {
+    await _alarmService.updateAlarm(alarm);
+    setState(() {
+      
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AlarmProvider>(
@@ -87,6 +94,8 @@ class _SingleAlarmState extends State<SingleAlarm> {
                 child: Container(
                   margin: const EdgeInsets.all(6),
                   child: SwitchListTile(
+                    activeTrackColor: Color.fromARGB(255, 103, 237, 255),
+                    activeColor: Color.fromARGB(255, 0, 217, 246),
                     secondary: const Icon(
                       Icons.alarm,
                     ),
@@ -117,12 +126,12 @@ class _SingleAlarmState extends State<SingleAlarm> {
                       ),
                       margin: const EdgeInsets.only(top: 2.0),
                     ),
-                    value: _isActive,
-                    onChanged: (bool value) {
+                    value: widget.alarm.active,
+                    onChanged: (bool value)  {
                       log("test1");
-                      setState(() {
-                        _isActive = value;
-                      });
+                      widget.alarm.active = value;
+                      _updateAlarm(widget.alarm);
+     
                     },
                   ),
                 ),

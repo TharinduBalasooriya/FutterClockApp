@@ -31,7 +31,8 @@ class _AlarmState extends State<AlarmPage> {
   void initState() {
     super.initState();
     _alarmService = widget._alarmService;
-    checkActiveAlarm();
+     checkActiveAlarm();
+  
   }
 
   void checkActiveAlarm() async {
@@ -45,7 +46,8 @@ class _AlarmState extends State<AlarmPage> {
       _alarms.forEach((Alarm element) {
         if (element.hour.toString() == hour &&
             element.minute.toString() == minute &&
-            element.ampm.toString() == ampm) {
+            element.ampm.toString() == ampm && element.active == true) {
+          t.cancel();
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -75,8 +77,11 @@ class _AlarmState extends State<AlarmPage> {
           ],
         ),
         body: FutureBuilder(
+          
             future: _alarmService.getAlarms(),
             builder: (context, AsyncSnapshot snapshot) {
+               
+
               if (snapshot.hasData) {
                 return ListView.builder(
                   itemCount: snapshot.data.length,

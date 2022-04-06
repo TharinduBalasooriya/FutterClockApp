@@ -106,7 +106,7 @@ class AlarmService {
         "minute": alarm.minute,
         "ampm": alarm.ampm,
         "days": alarm.days,
-        "active": true,
+        "active": alarm.active,
         "sound": alarm.sound
       }),
     );
