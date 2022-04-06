@@ -1,6 +1,8 @@
 import 'package:clock_app/pages/alarm.dart';
+import 'package:clock_app/pages/notePage.dart';
 import 'package:clock_app/pages/alarm_form.dart';
 import 'package:clock_app/pages/edit_alarm.dart';
+
 import 'package:clock_app/pages/reminder.dart';
 import 'package:clock_app/pages/reminder_form.dart';
 import 'package:clock_app/pages/todo.dart';
@@ -49,6 +51,7 @@ class MyApp extends StatelessWidget {
         Reminder_form.routeName: (context) => const Reminder_form(),
         AddAlarmform.routeName: (context) => const AddAlarmform(),
         //EditAlarm.routeName: (context) => const EditAlarm(alarmId: ''),
+
       },
     );
   }
