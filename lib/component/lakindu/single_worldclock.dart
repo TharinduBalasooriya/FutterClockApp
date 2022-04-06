@@ -64,7 +64,7 @@ class _SingleWorldState extends State<SingleWorld> {
                     onPressed:(BuildContext context) async {
                       Navigator.push(
                         context, 
-                      MaterialPageRoute(builder: (context) => Editworld(worldId:widget.world.id)),
+                      MaterialPageRoute(builder: (context) => Editworld(worldId:widget.world.id,worldtime:widget.world.time,worldlocation:widget.world.location)),
                       );
                       
                     },

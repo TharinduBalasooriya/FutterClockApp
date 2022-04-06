@@ -10,8 +10,12 @@ import '../../provider/worldtime_provider.dart';
 class Editworld extends StatefulWidget {
   static const String routeName = '/editworld';
   final String _worldId;
-  Editworld({Key? key, required String worldId})
+  final String _worldtime;
+  final String _worldlocation;
+  Editworld({Key? key, required String worldId,required String worldtime,required String worldlocation})
       : _worldId = worldId,
+        _worldtime=worldtime,
+        _worldlocation=worldlocation,
         super(key: key);
 
   @override
@@ -20,6 +24,8 @@ class Editworld extends StatefulWidget {
 
 class _EditworldclockState extends State<Editworld> {
   late String worldId;
+  late String worldtime;
+  late String worldlocation;
   late WorldService _worldService;
   late final World world;
   final notecontorler = TextEditingController();
@@ -31,6 +37,8 @@ class _EditworldclockState extends State<Editworld> {
     // TODO: implement initState
     super.initState();
     worldId = widget._worldId;
+    worldtime=widget._worldtime;
+    worldlocation=widget._worldlocation;
     _worldService = const WorldService();
     getWorlddetails();
   }
@@ -49,14 +57,14 @@ class _EditworldclockState extends State<Editworld> {
     return Column(
       children: [
         Text(
-          world.time,
+         worldtime,
           style: GoogleFonts.lato(
             fontSize: 36,
             fontWeight: FontWeight.w300,
           ),
         ),
         Text(
-          world.location,
+          worldlocation,
           style: GoogleFonts.lato(
             fontSize: 46,
             fontWeight: FontWeight.w700,
@@ -133,6 +141,7 @@ class _EditworldclockState extends State<Editworld> {
               children: <Widget>[
                 Column(
                   children: [
+                    _time(),
                     _setnote(),
                   ],
                 )
