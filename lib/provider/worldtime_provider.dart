@@ -27,4 +27,9 @@ Future<World> createWorldtime(World world) async{
   return result;
 }
 
+  Future<World> updateworld(World world) async {
+    World result = await _worldService.updateworld(world);
+    notifyListeners();
+    return result;
+  }
 }
