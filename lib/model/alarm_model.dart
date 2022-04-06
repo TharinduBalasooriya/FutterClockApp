@@ -15,12 +15,14 @@ class Alarm {
   String ampm;
   List<dynamic> days;
   String sound;
+  bool active;
 
   Alarm(
       {required this.id,
       required this.hour,
       required this.minute,
       required this.ampm,
+      required this.active,
       required this.days,
       required this.sound});
 
@@ -30,6 +32,7 @@ class Alarm {
       hour: data['hour'],
       minute: data['minute'],
       ampm: data['ampm'],
+      active: data['active'],
       days: data['days'],
       sound: data['sound'],
     );
