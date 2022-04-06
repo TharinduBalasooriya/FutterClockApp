@@ -31,7 +31,7 @@ class _NavBarState extends State<NavBar> {
           Navigator.of(context).pushNamed(WorldClock.routeName);
           break;
         case 1:
-          Navigator.of(context).pushNamed(Alarm.routeName);
+          Navigator.of(context).pushNamed(AlarmPage.routeName);
           break;
         case 2:
           Navigator.of(context).pushNamed(ToDoList.routeName);

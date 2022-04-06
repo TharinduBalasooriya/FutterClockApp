@@ -1,78 +1,81 @@
+import 'package:clock_app/pages/alarm_form.dart';
 import 'package:clock_app/pages/world_clock.dart';
+import 'package:clock_app/provider/alarm_provider.dart';
+import 'package:clock_app/services/alarm_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import '../component/alarm_component/single_alarm_component.dart';
 import '../component/navBar.dart';
 
-class Alarm extends StatefulWidget {
+class AlarmPage extends StatefulWidget {
   static const String routeName = '/alarm';
-  const Alarm({Key? key}) : super(key: key);
+  final AlarmService _alarmService;
+  const AlarmPage({Key? key})
+      : _alarmService = const AlarmService(),
+        super(key: key);
 
   @override
-  State<Alarm> createState() => _AlarmState();
+  State<AlarmPage> createState() => _AlarmState();
 }
 
-class _AlarmState extends State<Alarm> {
+class _AlarmState extends State<AlarmPage> {
+  late AlarmService _alarmService;
+  @override
+  void initState() {
+    super.initState();
+    _alarmService = widget._alarmService;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Alarm"),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.language),
-            onPressed: () {
-              // handle the press
-              Navigator.pushNamedAndRemoveUntil(
-                  context, WorldClock.routeName, (r) => false);
-            },
-          ),
-        ],
-      ),
-      body: ListView(
-        children: <Widget>[
-          Material(
-            child: Container(
-              margin: const EdgeInsets.all(6),
-              child: SwitchListTile(
-                activeColor: const Color.fromARGB(255, 0, 217, 246),
-                secondary: const Icon(
-                  Icons.alarm,
-                ),
-                title: Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: <Widget>[
-                    Text(
-                      "09:30",
-                      style: GoogleFonts.lato(
-                        fontSize: 48,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                subtitle: Container(
-                  child: Text(
-                    "Weekends",
-                    style: GoogleFonts.roboto(
-                      fontSize: 15
-                    ),
-                  ),
-                  margin: const EdgeInsets.only(top: 2.0),
-                ),
-                onChanged: (bool value) {
-                  value = !value;
-                },
-                value: true,
-              ),
+    return Consumer<AlarmProvider>(
+      builder: (context, value, child) => Scaffold(
+        appBar: AppBar(
+          title: const Text("Alarm"),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () {
+                // handle the press
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddAlarmform()),
+                );
+              },
             ),
-          ),
-          const Divider(),
-        ],
+          ],
+        ),
+        body: FutureBuilder(
+            future: _alarmService.getAlarms(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return SingleAlarm(alarm: snapshot.data[index]);
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return Text('Error ${snapshot.error}');
+              }
+    
+              // By default, show a loading spinner.
+              return Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [CircularProgressIndicator()],
+                ),
+              );
+            }),
+        bottomNavigationBar: const NavBar(
+          currItem: 1,
+        ),
       ),
-      bottomNavigationBar: const NavBar(
-        currItem: 1,
-      ),
+     
     );
   }
 }
