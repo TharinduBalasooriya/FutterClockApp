@@ -4,6 +4,7 @@ import 'package:clock_app/pages/alarm_form.dart';
 import 'package:clock_app/pages/alarm_ring_page.dart';
 import 'package:clock_app/provider/alarm_provider.dart';
 import 'package:clock_app/services/alarm_service.dart';
+import 'package:clock_app/services/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -26,13 +27,13 @@ class AlarmPage extends StatefulWidget {
 class _AlarmState extends State<AlarmPage> {
   late AlarmService _alarmService;
   late List<Alarm> _alarms;
+  late AudioService _audioService;
 
   @override
   void initState() {
     super.initState();
     _alarmService = widget._alarmService;
-     checkActiveAlarm();
-  
+    checkActiveAlarm();
   }
 
   void checkActiveAlarm() async {
@@ -46,7 +47,8 @@ class _AlarmState extends State<AlarmPage> {
       _alarms.forEach((Alarm element) {
         if (element.hour.toString() == hour &&
             element.minute.toString() == minute &&
-            element.ampm.toString() == ampm && element.active == true) {
+            element.ampm.toString() == ampm &&
+            element.active == true) {
           t.cancel();
           Navigator.push(
               context,
@@ -77,11 +79,8 @@ class _AlarmState extends State<AlarmPage> {
           ],
         ),
         body: FutureBuilder(
-          
             future: _alarmService.getAlarms(),
             builder: (context, AsyncSnapshot snapshot) {
-               
-
               if (snapshot.hasData) {
                 return ListView.builder(
                   itemCount: snapshot.data.length,
