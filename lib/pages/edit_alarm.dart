@@ -19,6 +19,7 @@ class EditAlarm extends StatefulWidget {
 }
 
 class _EditAlarmState extends State<EditAlarm> {
+  bool readyToLoad = false;
   late String alarmId;
   late AlarmService _alarmService;
   late Alarm alarm;
@@ -36,8 +37,10 @@ class _EditAlarmState extends State<EditAlarm> {
   };
 
   Map<String, bool> rigingTones = {
-    'RingingTone1': false,
-    'RinginTone2': false,
+    'Koombiyo': true,
+    'Naruto': false,
+    'Romantic': false,
+    'Shape-Of-You': false,
   };
 
   @override
@@ -60,7 +63,9 @@ class _EditAlarmState extends State<EditAlarm> {
     );
 
     minController.value = TextEditingValue(
-      text: alarm.minute.toString(),
+      text:  alarm.minute.toString().length == 1
+            ? '0${alarm.minute}'
+            : '${alarm.minute}',
       selection: TextSelection.fromPosition(
         TextPosition(offset: alarm.minute.toString().length),
       ),
@@ -96,25 +101,29 @@ class _EditAlarmState extends State<EditAlarm> {
 
     rigingTones.keys.contains(alarm.sound)
         ? rigingTones[alarm.sound] = true
-        : rigingTones['RingingTone1'] = true;
+        : rigingTones['Koombiyo'] = true;
 
-    setState(() {});
+    setState(() {
+      readyToLoad = true;
+    });
   }
 
   Future<void> _showTimePicker() async {
     final TimeOfDay? result =
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (result != null) {
-      alarm.ampm = result.hour < 12 ? 'AM' : 'PM';
+      alarm.ampm = result.period == DayPeriod.am ? 'AM' : 'PM';
       hourController.value = TextEditingValue(
-        text: result.hour.toString(),
+        text: result.hour % 12 == 0 ? '12' : '${result.hour % 12}',
         selection: TextSelection.fromPosition(
           TextPosition(offset: result.hour.toString().length),
         ),
       );
 
       minController.value = TextEditingValue(
-        text: result.minute.toString(),
+        text: result.minute.toString().length == 1
+            ? '0${result.minute}'
+            : '${result.minute}',
         selection: TextSelection.fromPosition(
           TextPosition(offset: result.minute.toString().length),
         ),
@@ -274,7 +283,7 @@ class _EditAlarmState extends State<EditAlarm> {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         title:
-                            Text("Every " + rigingTones.keys.toList()[index]),
+                            Text(rigingTones.keys.toList()[index]),
                         trailing: IconButton(
                           icon: Icon(Icons.check,
                               color: rigingTones[
@@ -302,80 +311,88 @@ class _EditAlarmState extends State<EditAlarm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Edit Alarm"),
-        actions: [
-          TextButton(
-              onPressed: () async {
-                _formKey.currentState?.save();
+    return readyToLoad
+        ? Scaffold(
+            appBar: AppBar(
+              title: const Text("Edit Alarm"),
+              actions: [
+                TextButton(
+                    onPressed: () async {
+                      _formKey.currentState?.save();
 
-                List<String> selectedDays = [];
-                days.forEach((key, value) {
-                  if (value) {
-                    selectedDays.add(key);
-                  }
-                });
+                      List<String> selectedDays = [];
+                      days.forEach((key, value) {
+                        if (value) {
+                          selectedDays.add(key);
+                        }
+                      });
 
-                String selectedTone = "";
-                rigingTones.forEach((key, value) {
-                  if (value) {
-                    selectedTone = key;
-                  }
-                });
+                      String selectedTone = "";
+                      rigingTones.forEach((key, value) {
+                        if (value) {
+                          selectedTone = key;
+                        }
+                      });
 
-                alarm.days = selectedDays;
-                alarm.sound = selectedTone;
+                      alarm.days = selectedDays;
+                      alarm.sound = selectedTone;
 
-                Alarm updatedAlarm =
-                    await Provider.of<AlarmProvider>(context, listen: false)
-                        .updateAlarm(alarm);
+                      Alarm updatedAlarm = await Provider.of<AlarmProvider>(
+                              context,
+                              listen: false)
+                          .updateAlarm(alarm);
 
-                if (updatedAlarm != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Alarm updated successfully'),
+                      if (updatedAlarm != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Alarm updated successfully'),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Error creating alarm'),
+                          ),
+                        );
+                      }
+                    },
+                    child: Text("SAVE",
+                        style: GoogleFonts.lato(
+                            fontSize: 17, color: Colors.white)))
+              ],
+            ),
+            body: (SingleChildScrollView(
+                child: Container(
+              margin: const EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      child: _buildTimeField(),
                     ),
-                  );
-                   Navigator.pop(context);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Error creating alarm'),
+                    const SizedBox(
+                      height: 20,
                     ),
-                  );
-                }
-              },
-              child: Text("SAVE",
-                  style: GoogleFonts.lato(fontSize: 17, color: Colors.white)))
-        ],
-      ),
-      body: (SingleChildScrollView(
-          child: Container(
-        margin: const EdgeInsets.all(24.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              Container(
-                child: _buildTimeField(),
+                    Container(
+                      child: _buildRepeatPicker(),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: _buildSoundPicker(),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                child: _buildRepeatPicker(),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                child: _buildSoundPicker(),
-              ),
-            ],
-          ),
-        ),
-      ))),
-    );
+            ))),
+          )
+        : const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
   }
 }

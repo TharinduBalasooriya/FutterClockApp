@@ -1,25 +1,24 @@
 import 'dart:convert';
-import 'dart:developer';
 
-import 'package:clock_app/model/alarm_model.dart';
+import 'package:clock_app/model/note_model.dart';
 import 'package:http/http.dart' as http;
 
-class AlarmService {
-  const AlarmService();
+class NoteService {
+  const NoteService();
 
-  Future<List<Alarm>> getAlarms() async {
-    var url = Uri.parse('https://clock-app-ctse.herokuapp.com/api/alarms');
+  Future<List<Note>> getNotes() async {
+    var url = Uri.parse('https://clock-app-ctse.herokuapp.com/api/notes');
     late http.Response response;
-    List<Alarm> alarms = [];
+    List<Note> notes = [];
 
     try {
       response = await http.get(url);
 
       if (response.statusCode == 200) {
-        List<dynamic> alarmData = jsonDecode(response.body);
+        List<dynamic> noteData = jsonDecode(response.body);
 
-        for (var item in alarmData) {
-          alarms.add(Alarm.fromJSON(item));
+        for (var item in noteData) {
+          notes.add(Note.fromJSON(item));
         }
       } else {
         return Future.error("Something gone wrong, ${response.statusCode}");
@@ -27,41 +26,42 @@ class AlarmService {
     } catch (e) {
       return Future.error(e.toString());
     }
-    return alarms;
+    return notes;
   }
 
-//Create Alarm
-  Future<Alarm> createAlarm(Alarm alarm) async {
+//Create Note
+  Future<Note> createNote(Note note) async {
     final response = await http.post(
-      Uri.parse('https://clock-app-ctse.herokuapp.com/api/alarms'),
+      Uri.parse('https://clock-app-ctse.herokuapp.com/api/notes'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        "hour": alarm.hour,
-        "minute": alarm.minute,
-        "ampm": alarm.ampm,
-        "days": alarm.days,
-        "active": true,
-        "sound": alarm.sound
+        "title": note.title,
+        "description": note.description,
+        "createdDate": note.createdDate,
+        "noteColor": note.noteColor,
+        "red": note.red,
+        "blue": note.blue,
+        "green": note.green
       }),
     );
 
     if (response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-      return Alarm.fromJSON(json.decode(response.body));
+      return Note.fromJSON(json.decode(response.body));
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to create album.');
+      throw Exception('Failed to create Note.');
     }
   }
 
-  //Delete Alarm
-  Future<bool> deleteAlarm(String id) async {
+  //Delete Note
+  Future<bool> deleteNote(String id) async {
     final http.Response response = await http.delete(
-      Uri.parse('https://clock-app-ctse.herokuapp.com/api/alarms/$id'),
+      Uri.parse('https://clock-app-ctse.herokuapp.com/api/notes/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -72,53 +72,54 @@ class AlarmService {
     } else {
       // If the server did not return a "200 OK response",
       // then throw an exception.
-      throw Exception('Failed to delete album.');
+      throw Exception('Failed to delete Note.');
     }
   }
 
-  //Get alarm by id
-  Future<Alarm> getAlarmById(String id) async {
+  //Get note by id
+  Future<Note> getNoteById(String id) async {
     final response = await http.get(
-      Uri.parse('https://clock-app-ctse.herokuapp.com/api/alarms/$id'),
+      Uri.parse('https://clock-app-ctse.herokuapp.com/api/notes/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
     if (response.statusCode == 200) {
-      return Alarm.fromJSON(json.decode(response.body));
+      return Note.fromJSON(json.decode(response.body));
     } else {
       // If the server did not return a "200 OK response",
       // then throw an exception.
-      throw Exception('Failed to get Alaem');
+      throw Exception('Failed to get Note');
     }
   }
 
-  //Update Alarm
-  Future<Alarm> updateAlarm(Alarm alarm) async {
+  //Update Note
+  Future<Note> updateNote(Note note) async {
     final response = await http.put(
-      Uri.parse('https://clock-app-ctse.herokuapp.com/api/alarms/${alarm.id}'),
+      Uri.parse('https://clock-app-ctse.herokuapp.com/api/notes/${note.id}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        "hour": alarm.hour,
-        "minute": alarm.minute,
-        "ampm": alarm.ampm,
-        "days": alarm.days,
-        "active": alarm.active,
-        "sound": alarm.sound
+        "title": note.title,
+        "description": note.description,
+        "createdDate": note.createdDate,
+        "noteColor": note.noteColor,
+        "red": note.red,
+        "blue": note.blue,
+        "green": note.green
       }),
     );
 
     if (response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-      return Alarm.fromJSON(json.decode(response.body));
+      return Note.fromJSON(json.decode(response.body));
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to update Alarm.');
+      throw Exception('Failed to update Note.');
     }
   }
 }

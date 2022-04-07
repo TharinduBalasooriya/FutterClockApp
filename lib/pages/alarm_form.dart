@@ -46,24 +46,30 @@ class _AddAlarmformState extends State<AddAlarmform> {
   };
 
   Map<String, bool> rigingTones = {
-    'RingingTone1': true,
-    'RinginTone2': false,
+    'Koombiyo': true,
+    'Naruto': false,
+    'Romantic': false,
+    'Shape-Of-You': false,
   };
 
   Future<void> _showTimePicker() async {
     final TimeOfDay? result =
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (result != null) {
-      _ampm = result.hour < 12 ? 'AM' : 'PM';
+      _ampm = result.period == DayPeriod.am ? 'AM' : 'PM';
+   
+
       hourController.value = TextEditingValue(
-        text: result.hour.toString(),
+        text: result.hour % 12 == 0 ? '12' : '${result.hour % 12}',
         selection: TextSelection.fromPosition(
           TextPosition(offset: result.hour.toString().length),
         ),
       );
 
       minController.value = TextEditingValue(
-        text: result.minute.toString(),
+        text: result.minute.toString().length == 1
+            ? '0${result.minute}'
+            : '${result.minute}',
         selection: TextSelection.fromPosition(
           TextPosition(offset: result.minute.toString().length),
         ),
@@ -223,7 +229,7 @@ class _AddAlarmformState extends State<AddAlarmform> {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         title:
-                            Text("Every " + rigingTones.keys.toList()[index]),
+                            Text(rigingTones.keys.toList()[index]),
                         trailing: IconButton(
                           icon: Icon(Icons.check,
                               color: rigingTones[
@@ -278,6 +284,7 @@ class _AddAlarmformState extends State<AddAlarmform> {
                     hour: _hr,
                     minute: _min,
                     ampm: _ampm,
+                    active: true,
                     days: selectedDays,
                     sound: selectedTone);
 
