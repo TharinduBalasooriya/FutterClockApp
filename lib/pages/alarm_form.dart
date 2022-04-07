@@ -46,8 +46,10 @@ class _AddAlarmformState extends State<AddAlarmform> {
   };
 
   Map<String, bool> rigingTones = {
-    'RingingTone1': true,
-    'RinginTone2': false,
+    'Koombiyo': true,
+    'Naruto': false,
+    'Romantic': false,
+    'Shape-Of-You': false,
   };
 
   Future<void> _showTimePicker() async {
@@ -227,7 +229,7 @@ class _AddAlarmformState extends State<AddAlarmform> {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         title:
-                            Text("Every " + rigingTones.keys.toList()[index]),
+                            Text(rigingTones.keys.toList()[index]),
                         trailing: IconButton(
                           icon: Icon(Icons.check,
                               color: rigingTones[

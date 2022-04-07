@@ -37,8 +37,10 @@ class _EditAlarmState extends State<EditAlarm> {
   };
 
   Map<String, bool> rigingTones = {
-    'RingingTone1': false,
-    'RinginTone2': false,
+    'Koombiyo': true,
+    'Naruto': false,
+    'Romantic': false,
+    'Shape-Of-You': false,
   };
 
   @override
@@ -99,7 +101,7 @@ class _EditAlarmState extends State<EditAlarm> {
 
     rigingTones.keys.contains(alarm.sound)
         ? rigingTones[alarm.sound] = true
-        : rigingTones['RingingTone1'] = true;
+        : rigingTones['Koombiyo'] = true;
 
     setState(() {
       readyToLoad = true;
@@ -281,7 +283,7 @@ class _EditAlarmState extends State<EditAlarm> {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         title:
-                            Text("Every " + rigingTones.keys.toList()[index]),
+                            Text(rigingTones.keys.toList()[index]),
                         trailing: IconButton(
                           icon: Icon(Icons.check,
                               color: rigingTones[

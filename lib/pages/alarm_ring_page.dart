@@ -1,9 +1,13 @@
 import 'package:clock_app/model/alarm_model.dart';
+import 'package:clock_app/pages/alarm.dart';
 import 'package:clock_app/services/alarm_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:slide_to_act/slide_to_act.dart';
+
+import '../provider/alarm_provider.dart';
+import '../services/audio_service.dart';
 
 class AlarmRing extends StatefulWidget {
   static const String routeName = '/ringAlarm';
@@ -22,6 +26,7 @@ class _AlarmRingState extends State<AlarmRing> {
   late AlarmService _alarmService;
   late Alarm alarmToBeRinged;
   bool darkThemeEnabled = false;
+  late AudioService _audioService;
 
   @override
   void initState() {
@@ -41,8 +46,10 @@ class _AlarmRingState extends State<AlarmRing> {
 
   Future<void> getAlarmDetails() async {
     alarmToBeRinged = await _alarmService.getAlarmById(alarmId);
+    _audioService = AudioService();
     setState(() {
       readyToLoad = true;
+      _audioService.play(alarmToBeRinged.sound);
     });
   }
 
@@ -100,8 +107,7 @@ class _AlarmRingState extends State<AlarmRing> {
                         ),
                       ),
                     ),
-                
-                     ClipRRect(
+                    ClipRRect(
                       borderRadius: BorderRadius.circular(50),
                       child: SlideAction(
                         height: 80,
@@ -114,19 +120,21 @@ class _AlarmRingState extends State<AlarmRing> {
                           child: Text(
                             'Turn off alarm!',
                             style: GoogleFonts.lato(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              color: const Color.fromARGB(255, 85, 85, 85)
-                            ),
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                                color: const Color.fromARGB(255, 85, 85, 85)),
                           ),
                         ),
                         onSubmit: () async {
-                          // mediaHandler.stopAlarm();
-                          // Wakelock.disable();
-
-                          // AlarmStatus().isAlarm = false;
-                          // AlarmStatus().alarmId = null;
-                          // SystemNavigator.pop();
+                          alarmToBeRinged.active = false;
+                          Alarm updatedAlarm = await Provider.of<AlarmProvider>(
+                                  context,
+                                  listen: false)
+                              .updateAlarm(alarmToBeRinged);
+                          _audioService.stop();
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => const AlarmPage()));
+                          
                         },
                         innerColor: const Color.fromARGB(255, 85, 85, 85),
                         outerColor: const Color.fromARGB(255, 0, 217, 246),
