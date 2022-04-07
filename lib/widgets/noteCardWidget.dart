@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../model/note_model.dart';
-import '../pages/notePage.dart';
 import '../pages/notes.dart';
 import '../provider/note_provider.dart';
 import '../services/note_service.dart';
