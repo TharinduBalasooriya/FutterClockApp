@@ -1,11 +1,11 @@
 class Note {
-  String? id;
+  String id;
   String title;
   String description;
   String? createdDate;
 
   Note(
-      {this.id,
+      {required this.id,
       required this.title,
       required this.description,
       this.createdDate});

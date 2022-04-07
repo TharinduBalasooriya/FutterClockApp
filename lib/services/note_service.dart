@@ -57,7 +57,7 @@ class NoteService {
   //Delete Note
   Future<bool> deleteNote(String id) async {
     final http.Response response = await http.delete(
-      Uri.parse('https://clock-app-ctse.herokuapp.com/api/notess/$id'),
+      Uri.parse('https://clock-app-ctse.herokuapp.com/api/notes/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
