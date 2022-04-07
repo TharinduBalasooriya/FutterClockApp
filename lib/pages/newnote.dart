@@ -61,26 +61,29 @@ class _NewNoteState extends State<NewNote> {
                     noteColor: _hexColor,
                     createdDate: DateFormat('yyyy-MM-dd – kk:mm')
                         .format(DateTime.now()));
-                Note createdNote =
-                    await Provider.of<NoteProvider>(context, listen: false)
-                        .addNote(note);
 
-                if (createdNote != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Note created successfully'),
-                    ),
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Notes()),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Error creating Note'),
-                    ),
-                  );
+                if (_formKey.currentState!.validate()) {
+                  Note createdNote =
+                      await Provider.of<NoteProvider>(context, listen: false)
+                          .addNote(note);
+
+                  if (createdNote != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Note created successfully'),
+                      ),
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Notes()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Error creating Note'),
+                      ),
+                    );
+                  }
                 }
               },
               child: Text("SAVE",
@@ -111,6 +114,12 @@ class _NewNoteState extends State<NewNote> {
                       fontSize: 26.0,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a title';
+                    }
+                    return null;
+                  },
                   onSaved: (value) {
                     _title = value!;
                   }),

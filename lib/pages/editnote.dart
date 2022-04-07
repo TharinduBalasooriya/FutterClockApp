@@ -108,7 +108,7 @@ class _EditNoteState extends State<EditNote> {
               child: Container(
                 width: double.infinity,
                 margin: EdgeInsets.only(
-                    top: 30.0, right: 25.0, left: 25.0, bottom: 250.0),
+                    top: 30.0, right: 25.0, left: 25.0, bottom: 30.0),
                 decoration: BoxDecoration(
                   // color: Color.fromARGB(255, 214, 213, 213),
                   color: _noteColor,
@@ -137,8 +137,8 @@ class _EditNoteState extends State<EditNote> {
                         child: TextFormField(
                             controller: descriptionController,
                             keyboardType: TextInputType.multiline,
-                            minLines: 10,
-                            maxLines: 15,
+                            minLines: 20,
+                            maxLines: 20,
                             decoration: const InputDecoration(
                                 hintText: "Enter Description",
                                 border: InputBorder.none,
