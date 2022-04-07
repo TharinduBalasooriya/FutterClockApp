@@ -3,7 +3,7 @@ import 'package:clock_app/pages/alarm_form.dart';
 
 import 'package:clock_app/pages/reminder.dart';
 import 'package:clock_app/pages/reminder_form.dart';
-import 'package:clock_app/pages/todo.dart';
+import 'package:clock_app/pages/notes.dart';
 import 'package:clock_app/pages/world_clock.dart';
 import 'package:clock_app/provider/alarm_provider.dart';
 import 'package:clock_app/provider/note_provider.dart';
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         WorldClock.routeName: (context) => const WorldClock(),
         AlarmPage.routeName: (context) => const AlarmPage(),
         Reminder.routeName: (context) => const Reminder(),
-        ToDoList.routeName: (context) => const ToDoList(),
+        Notes.routeName: (context) => const Notes(),
         Reminder_form.routeName: (context) => const Reminder_form(),
         AddAlarmform.routeName: (context) => const AddAlarmform(),
         //EditAlarm.routeName: (context) => const EditAlarm(alarmId: ''),

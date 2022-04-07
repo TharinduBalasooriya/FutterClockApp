@@ -27,4 +27,10 @@ class NoteProvider extends ChangeNotifier {
     notifyListeners();
     return result;
   }
+
+  Future<Note> updateNote(Note note) async {
+    Note result = await _noteService.updateNote(note);
+    notifyListeners();
+    return result;
+  }
 }
