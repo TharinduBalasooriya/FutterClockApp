@@ -1,10 +1,11 @@
+import 'package:clock_app/pages/editnote.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../model/note_model.dart';
 import '../pages/notePage.dart';
-import '../pages/todo.dart';
+import '../pages/notes.dart';
 import '../provider/note_provider.dart';
 import '../services/note_service.dart';
 
@@ -44,7 +45,7 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
               var res = await _noteService.deleteNote(widget.note.id);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ToDoList()),
+                MaterialPageRoute(builder: (context) => Notes()),
               );
             },
             child: Text("Yes, Delete",
@@ -85,7 +86,8 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const NotePage()),
+              MaterialPageRoute(
+                  builder: (context) => EditNote(noteId: widget.note.id)),
             );
           },
           child: Container(
@@ -116,7 +118,7 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
                         onPressed: () {
                           showAlertDialog(context);
                         },
-                        icon: const Icon(Icons.delete, color: Colors.black)),
+                        icon: const Icon(Icons.delete, color: Colors.white)),
                   ],
                 ),
                 Padding(

@@ -1,5 +1,5 @@
 import 'package:clock_app/model/note_model.dart';
-import 'package:clock_app/pages/todo.dart';
+import 'package:clock_app/pages/notes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +11,7 @@ import '../provider/note_provider.dart';
 import '../services/note_service.dart';
 
 class NewNote extends StatefulWidget {
-  static const String routeName = '/note';
+  static const String routeName = '/newNote';
   const NewNote({Key? key}) : super(key: key);
 
   @override
@@ -73,7 +73,7 @@ class _NewNoteState extends State<NewNote> {
                   );
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ToDoList()),
+                    MaterialPageRoute(builder: (context) => Notes()),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -135,7 +135,7 @@ class _NewNoteState extends State<NewNote> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 199, 198, 198)),
+                    primary: Color.fromARGB(255, 54, 54, 54)),
                 onPressed: () {
                   showDialog(
                       context: context,

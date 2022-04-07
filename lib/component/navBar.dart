@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:clock_app/pages/alarm.dart';
 import 'package:clock_app/pages/reminder.dart';
-import 'package:clock_app/pages/todo.dart';
+import 'package:clock_app/pages/notes.dart';
 import 'package:clock_app/pages/world_clock.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +34,7 @@ class _NavBarState extends State<NavBar> {
           Navigator.of(context).pushNamed(AlarmPage.routeName);
           break;
         case 2:
-          Navigator.of(context).pushNamed(ToDoList.routeName);
+          Navigator.of(context).pushNamed(Notes.routeName);
           break;
         case 3:
           Navigator.of(context).pushNamed(Reminder.routeName);
@@ -49,10 +49,18 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(icon: Icon(Icons.language_sharp,size: 30.0,), label: ''),
-        BottomNavigationBarItem(icon: Icon(Icons.access_alarm,size: 30.0), label: ''),
-        BottomNavigationBarItem(icon: Icon(Icons.library_books,size: 30.0), label: ''),
-        BottomNavigationBarItem(icon: Icon(Icons.calendar_month,size: 30.0), label: ''),
+        BottomNavigationBarItem(
+            icon: Icon(
+              Icons.language_sharp,
+              size: 30.0,
+            ),
+            label: ''),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.access_alarm, size: 30.0), label: ''),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.library_books, size: 30.0), label: ''),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month, size: 30.0), label: ''),
       ],
       selectedItemColor: const Color.fromARGB(255, 0, 217, 246),
       unselectedItemColor: const Color.fromARGB(255, 175, 180, 192),

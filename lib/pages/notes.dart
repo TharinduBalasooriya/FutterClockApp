@@ -7,18 +7,18 @@ import 'package:provider/provider.dart';
 import '../component/navBar.dart';
 import '../services/note_service.dart';
 
-class ToDoList extends StatefulWidget {
+class Notes extends StatefulWidget {
   static const String routeName = '/todo';
   final NoteService _noteService;
-  const ToDoList({Key? key})
+  const Notes({Key? key})
       : _noteService = const NoteService(),
         super(key: key);
 
   @override
-  State<ToDoList> createState() => _ToDoListState();
+  State<Notes> createState() => _NotesState();
 }
 
-class _ToDoListState extends State<ToDoList> {
+class _NotesState extends State<Notes> {
   late NoteService _noteService;
   @override
   void initState() {

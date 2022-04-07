@@ -103,10 +103,12 @@ class NoteService {
       },
       body: jsonEncode(<String, dynamic>{
         "title": note.title,
-        "descripton": note.description,
+        "description": note.description,
         "createdDate": note.createdDate,
-        // "noteColor": note.noteColor,
-        // "red":
+        "noteColor": note.noteColor,
+        "red": note.red,
+        "blue": note.blue,
+        "green": note.green
       }),
     );
 
