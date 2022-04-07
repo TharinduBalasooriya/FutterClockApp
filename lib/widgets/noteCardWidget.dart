@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../model/note_model.dart';
 import '../pages/notePage.dart';
+import '../pages/todo.dart';
 import '../provider/note_provider.dart';
 import '../services/note_service.dart';
 
@@ -28,19 +29,9 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
     _noteService = widget._noteService;
   }
 
-  Future<bool> _deleteNote() async {
-    return await _noteService.deleteNote(widget.note.id);
-  }
-
   // set up the AlertDialog
 
   showAlertDialog(BuildContext context) {
-    // set up the button
-    // Widget okButton = TextButton(
-    //   child: Text("OK"),
-    //   onPressed: () { },
-    // );
-
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Confirm Delete"),
@@ -49,19 +40,27 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
           "?"),
       actions: <Widget>[
         TextButton(
-            onPressed: () {
-              var res = _deleteNote();
-              print(res);
-              Navigator.of(context).pop();
+            onPressed: () async {
+              var res = await _noteService.deleteNote(widget.note.id);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ToDoList()),
+              );
             },
             child: Text("Yes, Delete",
-                style: GoogleFonts.lato(fontSize: 17, color: Colors.red))),
+                style: GoogleFonts.lato(
+                    fontSize: 17,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold))),
         TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
             child: Text("No",
-                style: GoogleFonts.lato(fontSize: 17, color: Colors.black))),
+                style: GoogleFonts.lato(
+                    fontSize: 17,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold))),
       ],
     );
 
@@ -92,12 +91,13 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
           child: Container(
             width: double.infinity,
             padding:
-                const EdgeInsets.symmetric(vertical: 32.0, horizontal: 24.0),
+                const EdgeInsets.symmetric(vertical: 25.0, horizontal: 24.0),
             margin: const EdgeInsets.only(
               bottom: 20.0,
             ),
             decoration: BoxDecoration(
-                color: Color.fromARGB(255, 213, 214, 218),
+                color: Color.fromARGB(
+                    255, widget.note.red, widget.note.green, widget.note.blue),
                 borderRadius: BorderRadius.circular(20.0)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,8 +116,7 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
                         onPressed: () {
                           showAlertDialog(context);
                         },
-                        icon: const Icon(Icons.delete,
-                            color: Color.fromARGB(199, 238, 73, 84))),
+                        icon: const Icon(Icons.delete, color: Colors.black)),
                   ],
                 ),
                 Padding(
@@ -130,6 +129,7 @@ class _NoteCardWidgetState extends State<NoteCardWidget> {
                     ),
                   ),
                 ),
+                Text("Created Date - " + widget.note.createdDate),
               ],
             ),
           ),

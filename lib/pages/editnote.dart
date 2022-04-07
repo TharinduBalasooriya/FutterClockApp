@@ -1,92 +1,99 @@
-import 'package:clock_app/model/note_model.dart';
-import 'package:clock_app/pages/todo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
 import '../component/navBar.dart';
+import '../model/note_model.dart';
 import '../provider/note_provider.dart';
 import '../services/note_service.dart';
 
-class NewNote extends StatefulWidget {
-  static const String routeName = '/note';
-  const NewNote({Key? key}) : super(key: key);
+class EditNote extends StatefulWidget {
+  static const String routeName = '/editNote';
+  final String _noteId;
+  const EditNote({Key? key, required String noteId})
+      : _noteId = noteId,
+        super(key: key);
 
   @override
-  State<NewNote> createState() => _NewNoteState();
+  State<EditNote> createState() => _EditNoteState();
 }
 
-class _NewNoteState extends State<NewNote> {
-  NoteService remindeservice = NoteService();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _EditNoteState extends State<EditNote> {
+  bool readyToLoad = false;
+  late String noteId;
+  late NoteService _noteService;
+  late Note note;
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
-  String _title = '';
-  String _description = '';
-  Color _noteColor = Color(0xff9e9e9e);
-  String _hexColor = "";
-  int _red = 0;
-  int _green = 0;
-  int _blue = 0;
-  // DateTime _createdDate = DateTime.now();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  int _getColorFromHex(String hexColor) {
-    return int.parse(hexColor, radix: 16);
+  final Color _noteColor = Color(0xff9e9e9e);
+
+  @override
+  void initState() {
+    super.initState();
+    noteId = widget._noteId;
+    _noteService = const NoteService();
+    getNoteDetails();
+  }
+
+  Future<void> getNoteDetails() async {
+    note = await _noteService.getNoteById(noteId);
+    titleController.value = TextEditingValue(
+      text: note.title.toString(),
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: note.title.toString().length),
+      ),
+    );
+    descriptionController.value = TextEditingValue(
+      text: note.description.toString(),
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: note.description.toString().length),
+      ),
+    );
+
+    setState(() {
+      readyToLoad = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("New Note"),
-        actions: <Widget>[
-          TextButton(
-              onPressed: () async {
-                _formKey.currentState?.save();
+      appBar: AppBar(title: const Text("Edit Note"), actions: [
+        TextButton(
+            onPressed: () async {
+              _formKey.currentState?.save();
 
-                String hexColor = _noteColor.value.toRadixString(16);
-                int intColor = _getColorFromHex(hexColor);
+              String title = "";
+              String description = "";
 
-                print(hexColor);
+              note.title = title;
+              note.description = description;
 
-                Note note = Note(
-                    id: "",
-                    title: _title,
-                    description: _description,
-                    red: _noteColor.red,
-                    green: _noteColor.green,
-                    blue: _noteColor.blue,
-                    noteColor: _hexColor,
-                    createdDate: DateFormat('yyyy-MM-dd – kk:mm')
-                        .format(DateTime.now()));
-                Note createdNote =
-                    await Provider.of<NoteProvider>(context, listen: false)
-                        .addNote(note);
+              Note updatedNote =
+                  await Provider.of<NoteProvider>(context, listen: false)
+                      .updateNote(note);
 
-                if (createdNote != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Note created successfully'),
-                    ),
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ToDoList()),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Error creating Note'),
-                    ),
-                  );
-                }
-              },
-              child: Text("SAVE",
-                  style: GoogleFonts.lato(fontSize: 17, color: Colors.white)))
-        ],
-      ),
+              if (updatedNote != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Note updated successfully'),
+                  ),
+                );
+                Navigator.pop(context);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Error updating note'),
+                  ),
+                );
+              }
+            },
+            child: Text("SAVE",
+                style: GoogleFonts.lato(fontSize: 17, color: Colors.white)))
+      ]),
       body: Form(
         key: _formKey,
         child: Container(
@@ -112,7 +119,7 @@ class _NewNoteState extends State<NewNote> {
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                   onSaved: (value) {
-                    _title = value!;
+                    note.title = value!;
                   }),
               Container(
                 margin: const EdgeInsets.only(top: 10),
@@ -129,7 +136,7 @@ class _NewNoteState extends State<NewNote> {
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 24.0)),
                       onSaved: (value) {
-                        _description = value!;
+                        note.description = value!;
                       }),
                 ),
               ),
@@ -145,13 +152,11 @@ class _NewNoteState extends State<NewNote> {
                           content: SingleChildScrollView(
                               child: BlockPicker(
                             pickerColor: _noteColor, //default color
-                            onColorChanged: (Color color) async {
+                            onColorChanged: (Color color) {
                               //on color picked
-                              setState(
-                                () {
-                                  _noteColor = color;
-                                },
-                              );
+                              setState(() {
+                                note.noteColor = color.value.toString();
+                              });
                             },
                           )),
                           actions: <Widget>[

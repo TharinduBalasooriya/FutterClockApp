@@ -34,10 +34,12 @@ class _ToDoListState extends State<ToDoList> {
           title: const Text("My Notes"),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.language),
+              icon: const Icon(Icons.add),
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, WorldClock.routeName, (r) => false);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NewNote()),
+                );
               },
             ),
           ],
@@ -56,7 +58,7 @@ class _ToDoListState extends State<ToDoList> {
         ),
         body: Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0),
           child: FutureBuilder(
               future: _noteService.getNotes(),
               builder: (context, AsyncSnapshot snapshot) {
@@ -82,40 +84,6 @@ class _ToDoListState extends State<ToDoList> {
                   ),
                 );
               }),
-          // Stack(
-          //   children: [
-          //     Column(
-          //       children: [
-          //         Expanded(
-          //           child: ListView(
-          //             children: [
-
-          //             ],
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //     Positioned(
-          //         bottom: 24.0,
-          //         right: 0.0,
-          //         child: GestureDetector(
-          //           onTap: () {
-          //             Navigator.push(
-          //               context,
-          //               MaterialPageRoute(
-          //                   builder: (context) => const NewNote()),
-          //             );
-          //           },
-          //           child: Container(
-          //               width: 60.0,
-          //               height: 60.0,
-          //               decoration: BoxDecoration(
-          //                 borderRadius: BorderRadius.circular(20.0),
-          //                 color: Colors.grey,
-          //               ),
-          //               child: const Icon(Icons.add)),
-          //         )),
-          //   ],
         ),
         bottomNavigationBar: const NavBar(
           currItem: 2,
