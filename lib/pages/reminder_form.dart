@@ -1,16 +1,35 @@
 // ignore_for_file: unnecessary_new
 
+import 'dart:html';
+
 import 'package:clock_app/pages/world_clock.dart';
+import 'package:clock_app/pages/reminder_form.dart';
 import 'package:clock_app/services/reminder_service.dart';
 import 'package:flutter/material.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:clock_app/model/reminder_model.dart';
 import 'package:clock_app/provider/reminder_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:clock_app/services/notification_service.dart';
 
 import '../component/navBar.dart';
 
 class Reminder_form extends StatefulWidget {
+  @override
+  void initState() {
+    NotificationService.init();
+    listenNotifications();
+  }
+
+  void listenNotifications() {
+    NotificationService.onNotifications.stream.listen(onClickedNotification);
+  }
+
+  void onClickedNotification(String? payload) => {
+
+    
+  };
+
   static const String routeName = '/reminder_form';
   const Reminder_form({Key? key}) : super(key: key);
 
@@ -59,7 +78,7 @@ class _ReminderState extends State<Reminder_form> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Country List'),
+            title: const Text('Repeat'),
             content: StatefulBuilder(
               builder: (context, setState) {
                 return SizedBox(
@@ -140,17 +159,17 @@ class _ReminderState extends State<Reminder_form> {
                 note: _note,
               );
 
-              
-               Reminder result  = await Provider.of<ReminderProvider>(context, listen: false).addReminder(reminder);
+              Reminder result =
+                  await Provider.of<ReminderProvider>(context, listen: false)
+                      .addReminder(reminder);
 
-              if (result  != null) {
+              if (result != null) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Reminder created successfully'),
                   ),
                 );
                 Navigator.pop(context);
-
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -170,6 +189,9 @@ class _ReminderState extends State<Reminder_form> {
             new ListTile(
               leading: const Icon(Icons.pending_actions),
               title: new TextFormField(
+                style: TextStyle(
+                  color: Color.fromARGB(255, 188, 188, 188),
+                ),
                 controller: nameController,
                 validator: (text) {
                   return null;
@@ -257,7 +279,7 @@ class _ReminderState extends State<Reminder_form> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Repeat",style: TextStyle(fontSize: 15)),
+                  const Text("Repeat", style: TextStyle(fontSize: 15)),
                   IconButton(
                     icon: const Icon(Icons.arrow_drop_down),
                     color: Colors.white,
@@ -273,7 +295,10 @@ class _ReminderState extends State<Reminder_form> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Priority",style: TextStyle(fontSize: 15),),
+                  const Text(
+                    "Priority",
+                    style: TextStyle(fontSize: 15),
+                  ),
                   ToggleButtons(
                     color: const Color.fromARGB(255, 0, 217, 246),
                     borderColor: Color.fromARGB(255, 151, 148, 148),
@@ -325,8 +350,11 @@ class _ReminderState extends State<Reminder_form> {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(children: [
-                  Text("Notes",style: TextStyle(fontSize: 15)),
+                  Text("Notes", style: TextStyle(fontSize: 15)),
                   TextFormField(
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 188, 188, 188),
+                    ),
                     controller: noteController,
                     validator: (text) {
                       return null;
@@ -341,7 +369,8 @@ class _ReminderState extends State<Reminder_form> {
                   ),
                 ]),
               ),
-            )
+            ),
+           
           ]),
         ),
       ),

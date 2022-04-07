@@ -10,25 +10,27 @@ class ReminderProvider extends ChangeNotifier {
   }
 
   Future<List<Reminder>> getReminder() async {
-    __reminders = await  _reminderService.getReminders();
+    __reminders = await _reminderService.getReminders();
     notifyListeners();
     return __reminders;
   }
 
   Future<bool> deleteReminder(String id) async {
     bool result = await _reminderService.deleteReminder(id);
-    
+
     notifyListeners();
     return result;
   }
 
   Future<Reminder> addReminder(Reminder reminder) async {
-   
-    Reminder result =  await _reminderService.createReminder(reminder);
-      notifyListeners();
+    Reminder result = await _reminderService.createReminder(reminder);
+    notifyListeners();
     return result;
   }
 
-
-
+  Future<Reminder> updateReminder(Reminder reminder) async {
+    Reminder result = await _reminderService.updateReminder(reminder);
+    notifyListeners();
+    return result;
+  }
 }

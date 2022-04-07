@@ -43,9 +43,12 @@ dependencies:
   flutter_slidable: ^1.2.0
   provider: ^6.0.2
   state_notifier: ^0.7.2+1
+  flutter_local_notifications: ^9.4.0
+  rxdart: ^0.27.3
   slide_to_act: ^2.0.1
   flutter_colorpicker: ^1.0.3
   audioplayers: ^0.20.1
+
 
 
 dev_dependencies:
