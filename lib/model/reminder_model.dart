@@ -1,14 +1,20 @@
-class Reminder{
-  final String id;
-  final String name;
-  final String date;
-  final String time;
-  final String repeat;
-  final String priority;
-  final String note;
+class Reminder {
+  String id;
+  String name;
+  String date;
+  String time;
+  String repeat;
+  String priority;
+  String note;
 
-
-  const Reminder({required this.id, required this.name, required this.date, required this.time, required this.repeat,required this.priority, required this.note});
+  Reminder(
+      {required this.id,
+      required this.name,
+      required this.date,
+      required this.time,
+      required this.repeat,
+      required this.priority,
+      required this.note});
 
   factory Reminder.fromJSON(Map<String, dynamic> data) {
     return Reminder(

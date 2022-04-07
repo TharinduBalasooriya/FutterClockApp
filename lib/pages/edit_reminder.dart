@@ -1,52 +1,34 @@
 // ignore_for_file: unnecessary_new
 
-import 'dart:html';
-
 import 'package:clock_app/pages/world_clock.dart';
-import 'package:clock_app/pages/reminder_form.dart';
 import 'package:clock_app/services/reminder_service.dart';
 import 'package:flutter/material.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:clock_app/model/reminder_model.dart';
 import 'package:clock_app/provider/reminder_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:clock_app/services/notification_service.dart';
 
 import '../component/navBar.dart';
 
-class Reminder_form extends StatefulWidget {
-  @override
-  void initState() {
-    NotificationService.init();
-    listenNotifications();
-  }
-
-  void listenNotifications() {
-    NotificationService.onNotifications.stream.listen(onClickedNotification);
-  }
-
-  void onClickedNotification(String? payload) => {
-
-    
-  };
-
-  static const String routeName = '/reminder_form';
-  const Reminder_form({Key? key}) : super(key: key);
+class EditReminder extends StatefulWidget {
+  final String _reminderId;
+  static const String routeName = '/editreminder';
+  const EditReminder({Key? key, required String reminderId})
+      : _reminderId = reminderId,
+        super(key: key);
 
   @override
-  State<Reminder_form> createState() => _ReminderState();
+  State<EditReminder> createState() => _EditReminderState();
 }
 
-class _ReminderState extends State<Reminder_form> {
-  ReminderService remindeservice = ReminderService();
+class _EditReminderState extends State<EditReminder> {
+   bool readyToLoad = false;
+  late String reminderId = '';
+  late ReminderService _remindeservice;
+  late final Reminder reminder;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final noteController = TextEditingController();
-  String _name = '';
-  String _note = '';
-  String _datetime = "";
-  String _priority = "";
-  String _repeat = "";
 
   bool widgetVisible = true;
   bool isActive = true;
@@ -68,6 +50,66 @@ class _ReminderState extends State<Reminder_form> {
   void hideWidget() {
     setState(() {
       widgetVisible = false;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    reminderId = widget._reminderId;
+    _remindeservice = const ReminderService();
+    getRemindermDetails();
+  }
+
+  Future<void> getRemindermDetails() async {
+    reminder = await _remindeservice.getReminderById(reminderId);
+
+    nameController.value = nameController.value = TextEditingValue(
+      text: reminder.name,
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: reminder.name.length),
+      ),
+    );
+
+    noteController.value = TextEditingValue(
+      text: reminder.note,
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: reminder.note.length),
+      ),
+    );
+
+    // reminder.date
+
+    switch (reminder.repeat) {
+      case 'Never':
+        days['Never'] = true;
+        break;
+      case 'Every Day':
+        days['Every Day'] = true;
+        break;
+      case 'Every Week':
+        days['Every Week'] = true;
+        break;
+      case 'Every 2 Weeks':
+        days['Every 2 Weeks'] = true;
+        break;
+      case 'Every Month':
+        days['Every Month'] = true;
+        break;
+      case 'Every Year':
+        days['Every Year'] = true;
+        break;
+      default:
+        days['Never'] = true;
+    }
+
+    // rigingTones.keys.contains(alarm.sound)
+    //     ? rigingTones[alarm.sound] = true
+    //     : rigingTones['RingingTone1'] = true;
+
+    setState(() {
+      readyToLoad = true;
     });
   }
 
@@ -105,17 +147,17 @@ class _ReminderState extends State<Reminder_form> {
                                   !val!;
 
                               if (index == 0) {
-                                _repeat = "Never";
+                                reminder.repeat = "Never";
                               } else if (index == 1) {
-                                _repeat = "Every Day";
+                                reminder.repeat = "Every Day";
                               } else if (index == 2) {
-                                _repeat = "Every Week";
+                                reminder.repeat = "Every Week";
                               } else if (index == 3) {
-                                _repeat = "Every 2 Weeks";
+                                reminder.repeat = "Every 2 Weeks";
                               } else if (index == 3) {
-                                _repeat = "Every Month";
+                                reminder.repeat = "Every Month";
                               } else {
-                                _repeat = "Every Year";
+                                reminder.repeat = "Every Year";
                               }
                             });
                           },
@@ -133,9 +175,12 @@ class _ReminderState extends State<Reminder_form> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    
+    return readyToLoad
+    
+      ?Scaffold(
       appBar: AppBar(
-        title: const Text("Create Reminder"),
+        title: const Text("Edit Reminder"),
         actions: <Widget>[
           TextButton.icon(
             icon: const Icon(Icons.done_all_rounded),
@@ -143,30 +188,14 @@ class _ReminderState extends State<Reminder_form> {
             onPressed: () async {
               _formKey.currentState?.save();
 
-              print(_datetime);
-              print(_name);
-              print(_note);
-              print(_priority);
-              print(_repeat);
-
-              Reminder reminder = Reminder(
-                id: "",
-                name: _name,
-                date: _datetime,
-                time: "",
-                repeat: _repeat,
-                priority: _priority,
-                note: _note,
-              );
-
               Reminder result =
                   await Provider.of<ReminderProvider>(context, listen: false)
-                      .addReminder(reminder);
+                      .updateReminder(reminder);
 
               if (result != null) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Reminder created successfully'),
+                    content: Text('Reminder Edited successfully'),
                   ),
                 );
                 Navigator.pop(context);
@@ -189,9 +218,6 @@ class _ReminderState extends State<Reminder_form> {
             new ListTile(
               leading: const Icon(Icons.pending_actions),
               title: new TextFormField(
-                style: TextStyle(
-                  color: Color.fromARGB(255, 188, 188, 188),
-                ),
                 controller: nameController,
                 validator: (text) {
                   return null;
@@ -200,7 +226,7 @@ class _ReminderState extends State<Reminder_form> {
                   hintText: "",
                 ),
                 onSaved: (value) {
-                  _name = value!;
+                  reminder.name = value!;
                 },
               ),
             ),
@@ -245,7 +271,7 @@ class _ReminderState extends State<Reminder_form> {
                               DateTimePicker(
                                   type: DateTimePickerType.dateTimeSeparate,
                                   dateMask: 'd MMM, yyyy',
-                                  initialValue: DateTime.now().toString(),
+                                  initialValue: reminder.date,
                                   firstDate: DateTime(2000),
                                   lastDate: DateTime(2100),
                                   icon: const Icon(Icons.event),
@@ -267,7 +293,7 @@ class _ReminderState extends State<Reminder_form> {
                                     return null;
                                   },
                                   onSaved: (val) {
-                                    _datetime = val!;
+                                    reminder.date = val!;
                                   }),
                             ])))),
                   ],
@@ -332,11 +358,11 @@ class _ReminderState extends State<Reminder_form> {
                         _selections[index] = !_selections[index];
                       });
                       if (index == 0) {
-                        _priority = "!";
+                        reminder.priority = "!";
                       } else if (index == 1)
-                        _priority = "!!";
+                        reminder.priority = "!!";
                       else
-                        _priority = "!!!";
+                        reminder.priority = "!!!";
                     },
                   )
                 ],
@@ -352,15 +378,12 @@ class _ReminderState extends State<Reminder_form> {
                 child: Column(children: [
                   Text("Notes", style: TextStyle(fontSize: 15)),
                   TextFormField(
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 188, 188, 188),
-                    ),
                     controller: noteController,
                     validator: (text) {
                       return null;
                     },
                     onSaved: (value) {
-                      _note = value!;
+                      reminder.note = value!;
                     },
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.newline,
@@ -369,19 +392,6 @@ class _ReminderState extends State<Reminder_form> {
                   ),
                 ]),
               ),
-            ),
-            Container(
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.blue,
-                ),
-                onPressed: () {
-                  NotificationService.showNotification(
-                    
-                      title: 'isini', body: 'isini', payload: 'ussj.abs');
-                },
-                child: Text('TextButton'),
-              ),
             )
           ]),
         ),
@@ -389,6 +399,10 @@ class _ReminderState extends State<Reminder_form> {
       bottomNavigationBar: const NavBar(
         currItem: 3,
       ),
-    );
+    ) : const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
   }
 }

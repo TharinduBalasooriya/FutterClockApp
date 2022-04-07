@@ -1,8 +1,7 @@
 import 'package:clock_app/pages/alarm.dart';
-import 'package:clock_app/pages/notePage.dart';
+
 import 'package:clock_app/pages/alarm_form.dart';
 import 'package:clock_app/pages/edit_alarm.dart';
-
 import 'package:clock_app/pages/reminder.dart';
 import 'package:clock_app/pages/reminder_form.dart';
 import 'package:clock_app/pages/todo.dart';
@@ -15,8 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:provider/provider.dart';
 import 'package:clock_app/pages/edit_alarm.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-void main() => runApp(
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+void main() async  => runApp(
       DevicePreview(
         enabled: !kReleaseMode,
         builder: (context) => MultiProvider(
