@@ -78,7 +78,7 @@ class _ReminderState extends State<Reminder_form> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Country List'),
+            title: const Text('Repeat'),
             content: StatefulBuilder(
               builder: (context, setState) {
                 return SizedBox(
@@ -370,19 +370,7 @@ class _ReminderState extends State<Reminder_form> {
                 ]),
               ),
             ),
-            Container(
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.blue,
-                ),
-                onPressed: () {
-                  NotificationService.showNotification(
-                    
-                      title: 'isini', body: 'isini', payload: 'ussj.abs');
-                },
-                child: Text('TextButton'),
-              ),
-            )
+           
           ]),
         ),
       ),

@@ -31,7 +31,7 @@ class _SingleRemindertate extends State<SingleReminder> {
   void initState() {
     super.initState();
     timer =
-        Timer.periodic(Duration(seconds: 3), (Timer t) => checkActiveAlarm());
+        Timer.periodic(Duration(seconds: 4), (Timer t) => checkActiveAlarm());
     _reminderService = widget._reminderService;
   }
 

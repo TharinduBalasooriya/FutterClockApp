@@ -58,7 +58,6 @@ class ReminderService {
     }
   }
 
-
   //Delete Reminder
   Future<bool> deleteReminder(String id) async {
     final http.Response response = await http.delete(
@@ -77,7 +76,7 @@ class ReminderService {
     }
   }
 
-   //Get reminder by id
+  //Get reminder by id
   Future<Reminder> getReminderById(String id) async {
     final response = await http.get(
       Uri.parse('https://clock-app-ctse.herokuapp.com/api/reminders/$id'),

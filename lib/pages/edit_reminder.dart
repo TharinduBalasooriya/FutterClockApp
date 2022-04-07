@@ -22,7 +22,7 @@ class EditReminder extends StatefulWidget {
 }
 
 class _EditReminderState extends State<EditReminder> {
-   bool readyToLoad = false;
+  bool readyToLoad = false;
   late String reminderId = '';
   late ReminderService _remindeservice;
   late final Reminder reminder;
@@ -120,7 +120,7 @@ class _EditReminderState extends State<EditReminder> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Country List'),
+            title: const Text('Repeat'),
             content: StatefulBuilder(
               builder: (context, setState) {
                 return SizedBox(
@@ -175,231 +175,232 @@ class _EditReminderState extends State<EditReminder> {
 
   @override
   Widget build(BuildContext context) {
-    
     return readyToLoad
-    
-      ?Scaffold(
-      appBar: AppBar(
-        title: const Text("Edit Reminder"),
-        actions: <Widget>[
-          TextButton.icon(
-            icon: const Icon(Icons.done_all_rounded),
-            label: Text(''),
-            onPressed: () async {
-              _formKey.currentState?.save();
+        ? Scaffold(
+            appBar: AppBar(
+              title: const Text("Edit Reminder"),
+              actions: <Widget>[
+                TextButton.icon(
+                  icon: const Icon(Icons.done_all_rounded),
+                  label: Text(''),
+                  onPressed: () async {
+                    _formKey.currentState?.save();
 
-              Reminder result =
-                  await Provider.of<ReminderProvider>(context, listen: false)
-                      .updateReminder(reminder);
+                    Reminder result = await Provider.of<ReminderProvider>(
+                            context,
+                            listen: false)
+                        .updateReminder(reminder);
 
-              if (result != null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Reminder Edited successfully'),
-                  ),
-                );
-                Navigator.pop(context);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Error creating alarm'),
-                  ),
-                );
-              }
-            },
-          )
-        ],
-      ),
-      body: Form(
-        key: _formKey,
-        child: Container(
-          margin: const EdgeInsets.only(top: 20),
-          child: new Column(children: <Widget>[
-            new ListTile(
-              leading: const Icon(Icons.pending_actions),
-              title: new TextFormField(
-                controller: nameController,
-                validator: (text) {
-                  return null;
-                },
-                decoration: new InputDecoration(
-                  hintText: "",
-                ),
-                onSaved: (value) {
-                  reminder.name = value!;
-                },
-              ),
+                    if (result != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Reminder Edited successfully'),
+                        ),
+                      );
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Error creating alarm'),
+                        ),
+                      );
+                    }
+                  },
+                )
+              ],
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: Card(
-                child: SwitchListTile(
-                  title: const Text(
-                    'Remind me on a day',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 235, 237, 238),
+            body: Form(
+              key: _formKey,
+              child: Container(
+                margin: const EdgeInsets.only(top: 20),
+                child: new Column(children: <Widget>[
+                  new ListTile(
+                    leading: const Icon(Icons.pending_actions),
+                    title: new TextFormField(
+                      controller: nameController,
+                      validator: (text) {
+                        return null;
+                      },
+                      decoration: new InputDecoration(
+                        hintText: "",
+                      ),
+                      onSaved: (value) {
+                        reminder.name = value!;
+                      },
                     ),
                   ),
-                  value: widgetVisible,
-                  activeColor: const Color.fromARGB(255, 0, 217, 246),
-                  inactiveTrackColor: Color.fromARGB(255, 250, 250, 250),
-                  onChanged: (showWidget) {
-                    setState(() {
-                      widgetVisible = showWidget;
-                    });
-                  },
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 2),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: new Column(
-                  children: <Widget>[
-                    Visibility(
-                        maintainSize: true,
-                        maintainAnimation: true,
-                        maintainState: true,
-                        visible: widgetVisible,
-                        child: Container(
-                            height: 80.0,
-                            width: double.infinity,
-                            margin: const EdgeInsets.only(top: 2),
-                            child: Center(
-                                child: Column(children: <Widget>[
-                              DateTimePicker(
-                                  type: DateTimePickerType.dateTimeSeparate,
-                                  dateMask: 'd MMM, yyyy',
-                                  initialValue: reminder.date,
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                  icon: const Icon(Icons.event),
-                                  dateLabelText: 'Date',
-                                  timeLabelText: "Hour",
-                                  selectableDayPredicate: (date) {
-                                    // Disable weekend days to select from the calendar
-                                    if (date.weekday == 6 ||
-                                        date.weekday == 7) {
-                                      return false;
-                                    }
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    child: Card(
+                      child: SwitchListTile(
+                        title: const Text(
+                          'Remind me on a day',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 235, 237, 238),
+                          ),
+                        ),
+                        value: widgetVisible,
+                        activeColor: const Color.fromARGB(255, 0, 217, 246),
+                        inactiveTrackColor: Color.fromARGB(255, 250, 250, 250),
+                        onChanged: (showWidget) {
+                          setState(() {
+                            widgetVisible = showWidget;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 2),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: new Column(
+                        children: <Widget>[
+                          Visibility(
+                              maintainSize: true,
+                              maintainAnimation: true,
+                              maintainState: true,
+                              visible: widgetVisible,
+                              child: Container(
+                                  height: 80.0,
+                                  width: double.infinity,
+                                  margin: const EdgeInsets.only(top: 2),
+                                  child: Center(
+                                      child: Column(children: <Widget>[
+                                    DateTimePicker(
+                                        type:
+                                            DateTimePickerType.dateTimeSeparate,
+                                        dateMask: 'd MMM, yyyy',
+                                        initialValue: reminder.date,
+                                        firstDate: DateTime(2000),
+                                        lastDate: DateTime(2100),
+                                        icon: const Icon(Icons.event),
+                                        dateLabelText: 'Date',
+                                        timeLabelText: "Hour",
+                                        selectableDayPredicate: (date) {
+                                          // Disable weekend days to select from the calendar
+                                          if (date.weekday == 6 ||
+                                              date.weekday == 7) {
+                                            return false;
+                                          }
 
-                                    return true;
-                                  },
-                                  onChanged: (val) => print(val),
-                                  validator: (val) {
-                                    // ignore: avoid_print
-                                    print(val);
-                                    return null;
-                                  },
-                                  onSaved: (val) {
-                                    reminder.date = val!;
-                                  }),
-                            ])))),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text("Repeat", style: TextStyle(fontSize: 15)),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_drop_down),
-                    color: Colors.white,
-                    onPressed: () {
-                      _showDaysDialog();
-                    },
+                                          return true;
+                                        },
+                                        onChanged: (val) => print(val),
+                                        validator: (val) {
+                                          // ignore: avoid_print
+                                          print(val);
+                                          return null;
+                                        },
+                                        onSaved: (val) {
+                                          reminder.date = val!;
+                                        }),
+                                  ])))),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Priority",
-                    style: TextStyle(fontSize: 15),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Repeat", style: TextStyle(fontSize: 15)),
+                        IconButton(
+                          icon: const Icon(Icons.arrow_drop_down),
+                          color: Colors.white,
+                          onPressed: () {
+                            _showDaysDialog();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  ToggleButtons(
-                    color: const Color.fromARGB(255, 0, 217, 246),
-                    borderColor: Color.fromARGB(255, 151, 148, 148),
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: <Widget>[
-                      const Text(
-                        "!",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 211, 83, 83),
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const Text(
-                        "!!",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 211, 83, 83),
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const Text(
-                        "!!!",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 211, 83, 83),
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                    isSelected: _selections,
-                    onPressed: (int index) {
-                      setState(() {
-                        _selections[index] = !_selections[index];
-                      });
-                      if (index == 0) {
-                        reminder.priority = "!";
-                      } else if (index == 1)
-                        reminder.priority = "!!";
-                      else
-                        reminder.priority = "!!!";
-                    },
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Priority",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        ToggleButtons(
+                          color: const Color.fromARGB(255, 0, 217, 246),
+                          borderColor: Color.fromARGB(255, 151, 148, 148),
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: <Widget>[
+                            const Text(
+                              "!",
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 211, 83, 83),
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const Text(
+                              "!!",
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 211, 83, 83),
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const Text(
+                              "!!!",
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 211, 83, 83),
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                          isSelected: _selections,
+                          onPressed: (int index) {
+                            setState(() {
+                              _selections[index] = !_selections[index];
+                            });
+                            if (index == 0) {
+                              reminder.priority = "!";
+                            } else if (index == 1)
+                              reminder.priority = "!!";
+                            else
+                              reminder.priority = "!!!";
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                  const Divider(
+                    height: 1.0,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(children: [
+                        Text("Notes", style: TextStyle(fontSize: 15)),
+                        TextFormField(
+                          controller: noteController,
+                          validator: (text) {
+                            return null;
+                          },
+                          onSaved: (value) {
+                            reminder.note = value!;
+                          },
+                          keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.newline,
+                          minLines: 3,
+                          maxLines: 5,
+                        ),
+                      ]),
+                    ),
                   )
-                ],
-              ),
-            ),
-            const Divider(
-              height: 1.0,
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(children: [
-                  Text("Notes", style: TextStyle(fontSize: 15)),
-                  TextFormField(
-                    controller: noteController,
-                    validator: (text) {
-                      return null;
-                    },
-                    onSaved: (value) {
-                      reminder.note = value!;
-                    },
-                    keyboardType: TextInputType.multiline,
-                    textInputAction: TextInputAction.newline,
-                    minLines: 3,
-                    maxLines: 5,
-                  ),
                 ]),
               ),
-            )
-          ]),
-        ),
-      ),
-      bottomNavigationBar: const NavBar(
-        currItem: 3,
-      ),
-    ) : const Scaffold(
+            ),
+            bottomNavigationBar: const NavBar(
+              currItem: 3,
+            ),
+          )
+        : const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
             ),
